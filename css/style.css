@@ -930,11 +930,43 @@ body {
   }
 
   .header {
-    padding: 40px 14px 32px;
+    padding: 20px 16px 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
   }
 
   .header.has-bg-image {
     min-height: 280px;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 220px;
+  }
+
+  .site-title {
+    align-self: flex-start;
+    font-size: 1.6rem;
+    margin-bottom: 0;
+  }
+
+  .site-subtitle {
+    align-self: flex-end;
+    margin-top: auto;
+    margin-bottom: 0;
+    font-size: 0.9rem;
+  }
+
+  .days-counter {
+    align-self: center;
+    margin-top: 10px;
   }
 
   .toolbar-inner {
