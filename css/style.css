@@ -469,20 +469,26 @@ body {
   margin-top: 8px;
 }
 
-/* Gallery grid */
+/* Gallery grid — 横向滚动 */
 .gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
 }
 
 .gallery-item {
   position: relative;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  aspect-ratio: 1 / 1;
+  flex: 0 0 75%;
+  scroll-snap-align: start;
+  aspect-ratio: 4 / 3;
   background: var(--bg);
   cursor: pointer;
+  min-width: 0;
 }
 
 .gallery-item img {
@@ -493,17 +499,7 @@ body {
 }
 
 .gallery-item:hover img {
-  transform: scale(1.08);
-}
-
-/* 第一张图更大展示 */
-.gallery-item:first-child {
-  grid-column: 1 / -1;
-  aspect-ratio: 4 / 3;
-}
-
-.gallery-item:first-child img {
-  object-position: top;
+  transform: scale(1.03);
 }
 
 .gallery-item-actions {
