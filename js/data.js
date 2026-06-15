@@ -21,6 +21,11 @@ window.CP_DATA = {
   galleryImages: [
     { src: "img/gallery/IMG_2838.JPG", caption: "忆江南" },
     { src: "img/gallery/6812451803a3745951cc2f90b0a59b07.jpeg", caption: "甜蜜合影" },
+    { src: "img/gallery/IMG_2840.JPG", caption: "" },
+    { src: "img/gallery/IMG_2841.JPG", caption: "" },
+    { src: "img/gallery/IMG_2842.JPG", caption: "" },
+    { src: "img/gallery/IMG_2843.JPG", caption: "" },
+    { src: "img/gallery/IMG_2844.JPG", caption: "" },
   ],
 
   // ==================== 时间线条目 ====================
