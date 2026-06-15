@@ -142,72 +142,28 @@ function formatBigDay(date) {
 
 let galleryActiveCategory = '全部';
 
-let galleryCat = '全部';
-
 function renderGallery() {
-  bindGalleryTabs();
-  renderGalleryGrid();
-}
-
-function bindGalleryTabs() {
-  var tabs = document.getElementById('galleryTabs');
-  if (!tabs || tabs._bound) return;
-  tabs._bound = true;
-  tabs.addEventListener('click', function(e) {
-    var btn = e.target.closest('.gallery-tab');
-    if (!btn) return;
-    tabs.querySelectorAll('.gallery-tab').forEach(function(b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-    galleryCat = btn.dataset.cat;
-    renderGalleryGrid();
-  });
-}
-
-function renderGalleryGrid() {
   var grid = document.getElementById('galleryGrid');
   if (!grid) return;
-  var all = window.CP_DATA.galleryImages || [];
-  var list = galleryCat === '全部' ? all : all.filter(function(i) { return i.category === galleryCat; });
+  var images = window.CP_DATA.galleryImages || [];
   grid.innerHTML = '';
 
-  for (var i = 0; i < list.length; i++) {
-    (function(img, idx) {
-      var item = document.createElement('div');
-      item.className = 'gallery-item';
-      item.setAttribute('data-category', img.category || '');
+  images.forEach(function(img, i) {
+    var item = document.createElement('div');
+    item.className = 'gallery-item';
 
-      var el = document.createElement('img');
-      el.src = img.src;
-      el.alt = img.caption || '';
-      el.loading = 'lazy';
-      el.onclick = function() {
-        var srcs = (galleryCat === '全部' ? all : list).map(function(x) { return x.src; });
-        Lightbox.open(srcs, galleryCat === '全部' ? idx : all.indexOf(img));
-      };
+    var el = document.createElement('img');
+    el.src = img.src;
+    el.alt = img.caption || '';
+    el.loading = 'lazy';
+    el.onclick = function() {
+      var srcs = images.map(function(x) { return x.src; });
+      Lightbox.open(srcs, i);
+    };
 
-      var dl = document.createElement('button');
-      dl.className = 'gallery-download-btn';
-      dl.title = '下载';
-      dl.innerHTML = '⬇';
-      dl.onclick = function(e) { e.stopPropagation(); downloadImage(img.src, img.caption || 'image'); };
-
-      var actions = document.createElement('div');
-      actions.className = 'gallery-item-actions';
-      actions.appendChild(dl);
-
-      item.appendChild(el);
-      item.appendChild(actions);
-
-      if (img.caption) {
-        var cap = document.createElement('div');
-        cap.className = 'gallery-caption';
-        cap.textContent = img.caption;
-        item.appendChild(cap);
-      }
-
-      grid.appendChild(item);
-    })(list[i], i);
-  }
+    item.appendChild(el);
+    grid.appendChild(item);
+  });
 }
 
 function downloadImage(src, filename) {

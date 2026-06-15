@@ -17,10 +17,10 @@ window.CP_DATA = {
   },
 
   // ==================== 左侧画廊图片 ====================
-  // 可用分类：新鲜 / 库存
+  // 新增图片：放文件到 img/gallery/，在这里加 { src: "路径", caption: "描述" }
   galleryImages: [
-    { src: "img/gallery/IMG_2838.JPG", caption: "忆江南", category: "新鲜" },
-    { src: "img/gallery/6812451803a3745951cc2f90b0a59b07.jpeg", caption: "甜蜜合影", category: "新鲜" },
+    { src: "img/gallery/IMG_2838.JPG", caption: "忆江南" },
+    { src: "img/gallery/6812451803a3745951cc2f90b0a59b07.jpeg", caption: "甜蜜合影" },
   ],
 
   // ==================== 时间线条目 ====================
