@@ -165,16 +165,26 @@ function renderGallery() {
     var item = document.createElement('div');
     item.className = 'gallery-item';
 
+    // 画廊展示缩略图（速度快）
     var el = document.createElement('img');
-    el.src = img.src;
+    el.src = img.thumb || img.src || '';
     el.alt = img.caption || '';
     el.loading = 'lazy';
     el.onclick = function() {
-      var srcs = images.map(function(x) { return x.src; });
-      Lightbox.open(srcs, i);
+      // 灯箱才加载原图
+      var fullSrcs = images.map(function(x) { return x.full || x.src || ''; });
+      Lightbox.open(fullSrcs, i);
     };
 
     item.appendChild(el);
+
+    if (img.caption) {
+      var cap = document.createElement('div');
+      cap.className = 'gallery-caption';
+      cap.textContent = img.caption;
+      item.appendChild(cap);
+    }
+
     grid.appendChild(item);
   });
 }

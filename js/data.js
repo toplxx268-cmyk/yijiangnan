@@ -19,13 +19,13 @@ window.CP_DATA = {
   // ==================== 左侧画廊图片 ====================
   // 新增图片：放文件到 img/gallery/，在这里加 { src: "路径", caption: "描述" }
   galleryImages: [
-    { src: "img/gallery/IMG_2838.JPG", caption: "忆江南" },
-    { src: "img/gallery/6812451803a3745951cc2f90b0a59b07.jpeg", caption: "甜蜜合影" },
-    { src: "img/gallery/IMG_2840.JPG", caption: "" },
-    { src: "img/gallery/IMG_2841.JPG", caption: "" },
-    { src: "img/gallery/IMG_2842.JPG", caption: "" },
-    { src: "img/gallery/IMG_2843.JPG", caption: "" },
-    { src: "img/gallery/IMG_2844.JPG", caption: "" },
+    { thumb: "img/gallery/thumbs/IMG_2838.JPG", full: "img/gallery/IMG_2838.JPG", caption: "忆江南" },
+    { thumb: "img/gallery/thumbs/6812451803a3745951cc2f90b0a59b07.jpeg", full: "img/gallery/6812451803a3745951cc2f90b0a59b07.jpeg", caption: "甜蜜合影" },
+    { thumb: "img/gallery/thumbs/IMG_2840.JPG", full: "img/gallery/IMG_2840.JPG", caption: "" },
+    { thumb: "img/gallery/thumbs/IMG_2841.JPG", full: "img/gallery/IMG_2841.JPG", caption: "" },
+    { thumb: "img/gallery/thumbs/IMG_2842.JPG", full: "img/gallery/IMG_2842.JPG", caption: "" },
+    { thumb: "img/gallery/thumbs/IMG_2843.JPG", full: "img/gallery/IMG_2843.JPG", caption: "" },
+    { thumb: "img/gallery/thumbs/IMG_2844.JPG", full: "img/gallery/IMG_2844.JPG", caption: "" },
   ],
 
   // ==================== 时间线条目 ====================
