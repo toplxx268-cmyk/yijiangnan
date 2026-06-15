@@ -332,8 +332,6 @@ body {
 .sidebar-left {
   width: var(--sidebar-width);
   flex-shrink: 0;
-  position: sticky;
-  top: 100px;
 }
 
 .sidebar-left .gallery-panel {
@@ -675,8 +673,6 @@ body {
 .sidebar-right {
   width: var(--guestbook-width);
   flex-shrink: 0;
-  position: sticky;
-  top: 100px;
 }
 
 .sidebar-right .guestbook {
@@ -919,7 +915,6 @@ body {
   .sidebar-left,
   .sidebar-right {
     width: 100%;
-    position: static;
   }
 
   /* 画廊在移动端显示为横向滚动 */
