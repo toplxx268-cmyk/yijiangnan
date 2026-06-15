@@ -143,85 +143,51 @@ function formatBigDay(date) {
 let galleryActiveCategory = '全部';
 
 function renderGallery() {
-  renderGalleryTabs();
-  renderGalleryGrid();
+  bindGalleryTabs();
+  bindGalleryImages();
 }
 
-/** 绑定分类标签点击事件，不重写 HTML */
-function renderGalleryTabs() {
+/** 分类标签点击 */
+function bindGalleryTabs() {
   const tabsEl = document.getElementById('galleryTabs');
-  if (!tabsEl) return;
+  if (!tabsEl || tabsEl._bound) return;
+  tabsEl._bound = true;
 
-  // 高亮当前选中分类
-  tabsEl.querySelectorAll('.gallery-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.cat === galleryActiveCategory);
+  tabsEl.addEventListener('click', (e) => {
+    const btn = e.target.closest('.gallery-tab');
+    if (!btn) return;
+    tabsEl.querySelectorAll('.gallery-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterGalleryByCategory(btn.dataset.cat);
   });
-
-  // 绑定点击事件（只绑定一次）
-  if (!tabsEl._bound) {
-    tabsEl._bound = true;
-    tabsEl.addEventListener('click', (e) => {
-      const btn = e.target.closest('.gallery-tab');
-      if (!btn) return;
-      galleryActiveCategory = btn.dataset.cat;
-      renderGalleryTabs();
-      renderGalleryGrid();
-    });
-  }
 }
 
-/** 渲染图片网格 */
-function renderGalleryGrid() {
-  const grid = document.getElementById('galleryGrid');
-  const empty = document.getElementById('galleryEmpty');
-  if (!grid) return;
-
-  const allImages = window.CP_DATA.galleryImages || [];
-  const images = galleryActiveCategory === '全部'
-    ? allImages
-    : allImages.filter(i => i.category === galleryActiveCategory);
-
-  if (images.length === 0) {
-    grid.innerHTML = '';
-    if (empty) empty.style.display = '';
-    return;
-  }
-
-  if (empty) empty.style.display = 'none';
-  grid.innerHTML = '';
-
-  images.forEach((img, i) => {
-    const allSrcs = images.map(x => x.src);
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-
-    const imgEl = document.createElement('img');
-    imgEl.src = img.src;
-    imgEl.alt = img.caption || '美图';
-    imgEl.loading = 'lazy';
-    imgEl.addEventListener('click', () => Lightbox.open(allSrcs, i));
-
-    const actions = document.createElement('div');
-    actions.className = 'gallery-item-actions';
-
-    const dl = document.createElement('button');
-    dl.className = 'gallery-download-btn';
-    dl.title = '下载';
-    dl.innerHTML = '⬇';
-    dl.addEventListener('click', (e) => { e.stopPropagation(); downloadImage(img.src, img.caption || 'image'); });
-    actions.appendChild(dl);
-
-    item.appendChild(imgEl);
-    item.appendChild(actions);
-
-    if (img.caption) {
-      const cap = document.createElement('div');
-      cap.className = 'gallery-caption';
-      cap.textContent = img.caption;
-      item.appendChild(cap);
+/** 按分类过滤图片 */
+function filterGalleryByCategory(cat) {
+  const items = document.querySelectorAll('#galleryGrid .gallery-item');
+  items.forEach(item => {
+    const itemCat = item.dataset.category || '';
+    if (cat === '全部' || itemCat === cat) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
     }
+  });
+}
 
-    grid.appendChild(item);
+/** 给图片绑定灯箱点击 */
+function bindGalleryImages() {
+  const grid = document.getElementById('galleryGrid');
+  if (!grid || grid._bound) return;
+  grid._bound = true;
+
+  grid.addEventListener('click', (e) => {
+    const img = e.target.closest('.gallery-item img');
+    if (!img) return;
+    const allImgs = [...grid.querySelectorAll('.gallery-item:not([style*="display: none"]) img')];
+    const srcs = allImgs.map(i => i.src);
+    const idx = allImgs.indexOf(img);
+    Lightbox.open(srcs, idx >= 0 ? idx : 0);
   });
 }
 
