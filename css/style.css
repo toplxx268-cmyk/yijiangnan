@@ -278,37 +278,6 @@ body {
   border-bottom: 2px solid var(--pink);
 }
 
-/* Upload area */
-.gallery-upload {
-  margin-bottom: 14px;
-  text-align: center;
-}
-
-.upload-btn {
-  display: inline-block;
-  padding: 8px 20px;
-  background: var(--pink);
-  color: var(--text);
-  border-radius: 20px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: var(--transition);
-  font-family: var(--font-body);
-  border: 1.5px dashed var(--pink-dark);
-}
-
-.upload-btn:hover {
-  background: var(--coral);
-  color: #fff;
-  border-color: var(--coral);
-}
-
-.upload-hint {
-  font-size: 0.7rem;
-  color: var(--text-lighter);
-  margin-top: 4px;
-}
-
 /* Gallery grid */
 .gallery-grid {
   display: grid;
@@ -617,78 +586,22 @@ body {
   text-align: center;
 }
 
-/* Guestbook form */
-.guestbook-form {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 14px;
-  padding-bottom: 12px;
-  border-bottom: 1px dashed rgba(200,160,160,0.25);
-}
-
-.guestbook-input,
-.guestbook-textarea {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1.5px solid var(--pink-dark);
-  border-radius: 10px;
-  font-size: 0.85rem;
-  font-family: var(--font-body);
-  color: var(--text);
-  background: var(--bg);
-  outline: none;
-  transition: var(--transition);
-  resize: vertical;
-}
-
-.guestbook-input:focus,
-.guestbook-textarea:focus {
-  border-color: var(--coral);
-  box-shadow: 0 0 0 2px rgba(232,160,160,0.15);
-}
-
-.guestbook-input::placeholder,
-.guestbook-textarea::placeholder {
+/* Guestbook description */
+.guestbook-desc {
+  font-size: 0.78rem;
   color: var(--text-lighter);
-}
-
-.guestbook-submit {
-  padding: 7px 0;
-  border: none;
-  border-radius: 20px;
-  background: var(--coral);
-  color: #fff;
-  font-size: 0.85rem;
-  font-family: var(--font-body);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.guestbook-submit:hover {
-  background: var(--rose);
-}
-
-/* Guestbook badge */
-.guestbook-badge {
-  font-size: 0.65rem;
-  padding: 1px 6px;
-  background: var(--pink);
-  color: var(--coral-dark);
-  border-radius: 8px;
-  font-weight: 500;
-}
-
-.guestbook-empty {
   text-align: center;
-  padding: 20px 10px;
-  color: var(--text-lighter);
-  font-size: 0.9rem;
+  margin-bottom: 10px;
+  line-height: 1.5;
 }
 
-.guestbook-empty p:first-child {
-  font-size: 2rem;
-  margin-bottom: 6px;
+/* Utterances container */
+#utterances-comments {
+  margin-bottom: 10px;
+}
+
+#utterances-comments .utterances {
+  max-width: 100%;
 }
 
 .guestbook-messages {

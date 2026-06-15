@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>忆江南 — 我们的故事</title>
+  <title>忆江南cp — 爱的足迹👣</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,19 +50,10 @@
   <!-- 三栏布局 -->
   <div class="main-layout">
 
-    <!-- 左侧：图片展览区 -->
+    <!-- 左侧：美图合集 -->
     <aside class="sidebar sidebar-left" id="gallerySidebar">
       <div class="gallery-panel">
         <h3 class="gallery-title">🖼️ 美图合集</h3>
-
-        <!-- 上传区 -->
-        <div class="gallery-upload" id="galleryUpload">
-          <label class="upload-btn" for="galleryFileInput" title="上传图片（存储在本地浏览器）">
-            📤 上传图片
-          </label>
-          <input type="file" id="galleryFileInput" accept="image/*" multiple hidden>
-          <p class="upload-hint">图片保存在本地浏览器中</p>
-        </div>
 
         <!-- 图片网格 -->
         <div class="gallery-grid" id="galleryGrid">
@@ -73,8 +64,7 @@
         <div class="gallery-empty" id="galleryEmpty">
           <p class="gallery-empty-icon">📷</p>
           <p class="gallery-empty-text">还没有图片</p>
-          <p class="gallery-empty-hint">点击上方按钮上传，或将图片放入
-            <code>img/gallery/</code> 目录并在 <code>data.js</code> 中添加</p>
+          <p class="gallery-empty-hint">将图片放入 <code>img/gallery/</code> 目录<br>在 <code>data.js</code> 的 <code>galleryImages</code> 中添加即可</p>
         </div>
       </div>
     </aside>
@@ -84,26 +74,13 @@
       <!-- 时间线条目由 JS 渲染 -->
     </main>
 
-    <!-- 右侧：留言板 -->
+    <!-- 右侧：留言区 -->
     <aside class="sidebar sidebar-right" id="guestbookSidebar">
       <div class="guestbook">
-        <h3 class="guestbook-title">💌 粉丝留言</h3>
-
-        <!-- 留言输入表单 -->
-        <form class="guestbook-form" id="guestbookForm">
-          <input type="text" class="guestbook-input" id="guestbookName"
-                 placeholder="你的昵称" maxlength="20" required>
-          <textarea class="guestbook-textarea" id="guestbookMsg"
-                    placeholder="写下你想对忆江南说的话..."
-                    rows="3" maxlength="300" required></textarea>
-          <button type="submit" class="guestbook-submit">💕 提交留言</button>
-        </form>
-
-        <!-- 留言列表 -->
-        <div class="guestbook-messages" id="guestbookMessages">
-          <!-- 留言由 JS 渲染 -->
-        </div>
-
+        <h3 class="guestbook-title">💌 留言板</h3>
+        <p class="guestbook-desc">用 GitHub 账号登录即可留言，所有人可见 ✨</p>
+        <!-- utterances — GitHub Issues 驱动，免费共享 -->
+        <div id="utterances-comments"></div>
         <div class="guestbook-footer">
           <a href="https://weibo.com/ttarticle/x/m/show#/id=2309405214849822490964" target="_blank" rel="noopener" class="guestbook-link">👉 前往微博原文</a>
         </div>
