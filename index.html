@@ -57,6 +57,13 @@
 
     <!-- 左侧：美图合集 -->
     <aside class="sidebar sidebar-left" id="gallerySidebar">
+      <!-- 最新动态 -->
+      <div class="gallery-panel feed-panel" id="feedPanel" hidden>
+        <h3 class="gallery-title">📡 最新动态</h3>
+        <div class="feed-list" id="feedList"></div>
+        <p class="feed-updated" id="feedUpdated"></p>
+      </div>
+
       <div class="gallery-panel">
         <h3 class="gallery-title">🖼️ 美图合集</h3>
 
@@ -118,6 +125,7 @@
 
   <!-- Scripts -->
   <script src="js/data.js"></script>
+  <script src="js/feeds.js"></script>
   <script src="js/gallery.js"></script>
   <script src="js/timeline.js"></script>
   <script src="js/tags.js"></script>

@@ -45,6 +45,7 @@
   initSearch();
   renderGallery();
   renderBigDays();
+  renderFeeds();
   initUtterances();
   initBackToTop();
 
@@ -52,6 +53,32 @@
 })();
 
 /** Back to top button */
+/** 渲染最新动态概览 */
+function renderFeeds() {
+  var feeds = window.LATEST_FEEDS;
+  if (!feeds || feeds.length === 0) return;
+
+  var panel = document.getElementById('feedPanel');
+  var list = document.getElementById('feedList');
+  var updated = document.getElementById('feedUpdated');
+  if (!panel || !list) return;
+
+  panel.hidden = false;
+
+  list.innerHTML = feeds.map(function(f) {
+    var emoji = f.author === '一枝南南' ? '🌸' : '🌟';
+    return '<a class="feed-item" href="' + f.url + '" target="_blank" rel="noopener">' +
+      '<span class="feed-emoji">' + emoji + '</span>' +
+      '<span class="feed-text">' + escapeHTML(f.title || '(无文字)') + '</span>' +
+      '<span class="feed-date">' + (f.date || '') + '</span>' +
+      '</a>';
+  }).join('');
+
+  if (feeds[0] && feeds[0].date) {
+    updated.textContent = '更新于 ' + feeds[0].date;
+  }
+}
+
 function initBackToTop() {
   var btn = document.getElementById('backToTop');
   if (!btn) return;
