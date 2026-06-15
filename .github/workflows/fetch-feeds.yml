@@ -28,11 +28,11 @@ jobs:
       - name: 抓取小江抖音
         run: curl -s -m 30 "http://localhost:1200/douyin/user/MS4wLjABAAAAwLq6euIvZ4xpdGf4BQzh3zxlvmnqlNMUPOfy1ClbsMk?format=json" > /tmp/xiaojiang-douyin.json 2>&1 || echo '{"items":[]}' > /tmp/xiaojiang-douyin.json
 
-      - name: 抓取南南小红书 ← 等拿到ID后更新
-        run: echo '{"items":[]}' > /tmp/nannan-xhs.json
+      - name: 抓取南南小红书
+        run: curl -s -m 30 "http://localhost:1200/xiaohongshu/user/5604f1e6e4b1cf3ec7c681aa/notes?format=json" > /tmp/nannan-xhs.json 2>&1 || echo '{"items":[]}' > /tmp/nannan-xhs.json
 
-      - name: 抓取小江小红书 ← 等拿到ID后更新
-        run: echo '{"items":[]}' > /tmp/xiaojiang-xhs.json
+      - name: 抓取小江小红书
+        run: curl -s -m 30 "http://localhost:1200/xiaohongshu/user/594d505250c4b46b76bcacf6/notes?format=json" > /tmp/xiaojiang-xhs.json 2>&1 || echo '{"items":[]}' > /tmp/xiaojiang-xhs.json
 
       - name: 停止 RSSHub
         run: docker stop rsshub
