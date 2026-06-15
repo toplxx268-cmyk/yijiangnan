@@ -353,6 +353,37 @@ body {
   border-bottom: 2px solid var(--pink);
 }
 
+/* Gallery category tabs */
+.gallery-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.gallery-tab {
+  padding: 4px 12px;
+  border: 1.2px solid var(--pink-dark);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--text-light);
+  font-size: 0.75rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.gallery-tab:hover {
+  background: var(--pink);
+  color: var(--text);
+}
+
+.gallery-tab.active {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+}
+
 /* Gallery grid */
 .gallery-grid {
   display: grid;

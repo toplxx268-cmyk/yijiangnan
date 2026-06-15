@@ -137,15 +137,51 @@ function formatBigDay(date) {
 }
 
 // ============================================================
-// Gallery — 左侧美图合集（仅展示 data.js galleryImages）
+// Gallery — 左侧美图合集（支持分类：合照/自拍/旅行/日常/活动）
 // ============================================================
 
+let galleryActiveCategory = '全部';
+
 function renderGallery() {
+  renderGalleryTabs();
+  renderGalleryGrid();
+}
+
+/** 渲染分类标签 */
+function renderGalleryTabs() {
+  const tabsEl = document.getElementById('galleryTabs');
+  if (!tabsEl) return;
+
+  const images = window.CP_DATA.galleryImages || [];
+  const cats = new Set(images.map(i => i.category).filter(Boolean));
+  const order = ['新鲜', '库存'];
+
+  const categories = ['全部', ...order.filter(c => cats.has(c))];
+
+  tabsEl.innerHTML = categories.map(cat => {
+    const active = cat === galleryActiveCategory ? ' active' : '';
+    return `<button class="gallery-tab${active}" data-cat="${cat}">${cat}</button>`;
+  }).join('');
+
+  tabsEl.querySelectorAll('.gallery-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      galleryActiveCategory = btn.dataset.cat;
+      renderGalleryTabs();
+      renderGalleryGrid();
+    });
+  });
+}
+
+/** 渲染图片网格 */
+function renderGalleryGrid() {
   const grid = document.getElementById('galleryGrid');
   const empty = document.getElementById('galleryEmpty');
   if (!grid) return;
 
-  const images = window.CP_DATA.galleryImages || [];
+  const allImages = window.CP_DATA.galleryImages || [];
+  const images = galleryActiveCategory === '全部'
+    ? allImages
+    : allImages.filter(i => i.category === galleryActiveCategory);
 
   if (images.length === 0) {
     grid.innerHTML = '';
@@ -156,7 +192,8 @@ function renderGallery() {
   if (empty) empty.style.display = 'none';
   grid.innerHTML = '';
 
-  images.forEach((img, index) => {
+  images.forEach((img, i) => {
+    const allSrcs = images.map(x => x.src);
     const item = document.createElement('div');
     item.className = 'gallery-item';
 
@@ -164,23 +201,17 @@ function renderGallery() {
     imgEl.src = img.src;
     imgEl.alt = img.caption || '美图';
     imgEl.loading = 'lazy';
-    imgEl.addEventListener('click', () => {
-      const allSrcs = images.map(i => i.src);
-      Lightbox.open(allSrcs, index);
-    });
+    imgEl.addEventListener('click', () => Lightbox.open(allSrcs, i));
 
     const actions = document.createElement('div');
     actions.className = 'gallery-item-actions';
 
-    const downloadBtn = document.createElement('button');
-    downloadBtn.className = 'gallery-download-btn';
-    downloadBtn.title = '下载图片';
-    downloadBtn.innerHTML = '⬇';
-    downloadBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      downloadImage(img.src, img.caption || 'image');
-    });
-    actions.appendChild(downloadBtn);
+    const dl = document.createElement('button');
+    dl.className = 'gallery-download-btn';
+    dl.title = '下载';
+    dl.innerHTML = '⬇';
+    dl.addEventListener('click', (e) => { e.stopPropagation(); downloadImage(img.src, img.caption || 'image'); });
+    actions.appendChild(dl);
 
     item.appendChild(imgEl);
     item.appendChild(actions);
