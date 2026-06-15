@@ -900,8 +900,8 @@ body {
   }
 }
 
-/* ≤860px: 三栏变成单栏堆叠 */
-@media (max-width: 860px) {
+/* ≤700px: 三栏变成单栏堆叠 */
+@media (max-width: 700px) {
   .main-layout {
     flex-direction: column;
     gap: 20px;
