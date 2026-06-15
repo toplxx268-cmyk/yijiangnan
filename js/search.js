@@ -35,7 +35,7 @@ function initSearch() {
     input.focus();
   });
 
-  // Keyboard shortcut: Ctrl/Cmd + K to focus search
+  // Keyboard shortcut:  to focus search
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
       e.preventDefault();

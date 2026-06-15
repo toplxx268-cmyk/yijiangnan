@@ -1088,7 +1088,7 @@ window.CP_DATA = {
         { url: "http://t.cn/A6E44HTD", label: "七夕🎁" },
         { url: "http://t.cn/A6E44HTk", label: "足迹👣地图" },
         { url: "http://t.cn/A6EXDz8X", label: "xql周边" },
-        { url: "http://t.cn/A6EXkNS3", label: "xql画 1" },
+        { url: "http://t.cn/A6EXkNS3", label: "xql画" },
         { url: "http://t.cn/A6EYrbae", label: "六个月纪念" },
         { url: "http://t.cn/A6E3bnt8", label: "花花和信" }
       ],
@@ -1142,7 +1142,7 @@ window.CP_DATA = {
       links: [
         { url: "http://t.cn/A6E44HTg", label: "座位1314" },
         { url: "http://t.cn/A6E44HHP", label: "24跨年夜百米距离" },
-        { url: "http://t.cn/A6E44HTr", label: "平行世界相遇 1" },
+        { url: "http://t.cn/A6E44HTr", label: "平行世界相遇" },
         { url: "http://t.cn/A6EQa9tO", label: "七年命定相遇" },
         { url: "http://t.cn/A6E3Gtdo", label: "新天地命运起点" },
         { url: "http://t.cn/A6n8dJeL", label: "23年度视频总结" }

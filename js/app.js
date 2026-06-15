@@ -27,12 +27,14 @@
     }
   }
 
-  // Days counter
+  // Days counter（修正时区偏差，按本地时间计算）
   if (data.meta.startDate) {
-    const start = new Date(data.meta.startDate);
-    const today = new Date();
-    const days = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    const daysEl = document.querySelector('.days-number');
+    var parts = data.meta.startDate.split('-').map(Number);
+    var start = new Date(parts[0], parts[1] - 1, parts[2]); // 本地午夜
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var days = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+    var daysEl = document.querySelector('.days-number');
     if (daysEl && days > 0) {
       daysEl.textContent = days;
     }
