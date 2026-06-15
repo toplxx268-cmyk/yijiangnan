@@ -66,10 +66,12 @@ function renderFeeds() {
   panel.hidden = false;
 
   list.innerHTML = feeds.map(function(f) {
-    var emoji = f.author === '一枝南南' ? '🌸' : '🌟';
+    var platformEmoji = { '微博': '🔵', '抖音': '🎵', '小红书': '📕' }[f.platform] || '🔗';
+    var authorEmoji = f.author === '南南' ? '🌸' : '🌟';
     return '<a class="feed-item" href="' + f.url + '" target="_blank" rel="noopener">' +
-      '<span class="feed-emoji">' + emoji + '</span>' +
+      '<span class="feed-emoji">' + authorEmoji + '</span>' +
       '<span class="feed-text">' + escapeHTML(f.title || '(无文字)') + '</span>' +
+      '<span class="feed-platform">' + platformEmoji + '</span>' +
       '<span class="feed-date">' + (f.date || '') + '</span>' +
       '</a>';
   }).join('');

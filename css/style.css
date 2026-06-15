@@ -462,6 +462,11 @@ body {
   flex-shrink: 0;
 }
 
+.feed-platform {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
 .feed-updated {
   font-size: 0.7rem;
   color: var(--text-lighter);

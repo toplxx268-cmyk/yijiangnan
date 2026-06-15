@@ -2,8 +2,8 @@ name: 抓取最新动态
 
 on:
   schedule:
-    - cron: '0 */6 * * *'   # 每6小时
-  workflow_dispatch:          # 手动触发
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
 
 jobs:
   fetch:
@@ -14,15 +14,25 @@ jobs:
       - name: 启动 RSSHub
         run: |
           docker run -d --name rsshub -p 1200:1200 rsshub/rsshub:latest
-          sleep 10
+          sleep 15
 
       - name: 抓取南南微博
-        run: |
-          curl -s -m 30 "http://localhost:1200/weibo/user/7817829627?format=json" > /tmp/nannan.json 2>&1 || echo '{"items":[]}' > /tmp/nannan.json
+        run: curl -s -m 30 "http://localhost:1200/weibo/user/7817829627?format=json" > /tmp/nannan-weibo.json 2>&1 || echo '{"items":[]}' > /tmp/nannan-weibo.json
 
       - name: 抓取小江微博
-        run: |
-          curl -s -m 30 "http://localhost:1200/weibo/user/7664743621?format=json" > /tmp/xiaojiang.json 2>&1 || echo '{"items":[]}' > /tmp/xiaojiang.json
+        run: curl -s -m 30 "http://localhost:1200/weibo/user/7664743621?format=json" > /tmp/xiaojiang-weibo.json 2>&1 || echo '{"items":[]}' > /tmp/xiaojiang-weibo.json
+
+      - name: 抓取南南抖音
+        run: curl -s -m 30 "http://localhost:1200/douyin/user/MS4wLjABAAAAbY-P2k3HKZ8_aJXenEdJpRBW3yldUYN-VAkzucwRi24?format=json" > /tmp/nannan-douyin.json 2>&1 || echo '{"items":[]}' > /tmp/nannan-douyin.json
+
+      - name: 抓取小江抖音
+        run: curl -s -m 30 "http://localhost:1200/douyin/user/MS4wLjABAAAAwLq6euIvZ4xpdGf4BQzh3zxlvmnqlNMUPOfy1ClbsMk?format=json" > /tmp/xiaojiang-douyin.json 2>&1 || echo '{"items":[]}' > /tmp/xiaojiang-douyin.json
+
+      - name: 抓取南南小红书 ← 等拿到ID后更新
+        run: echo '{"items":[]}' > /tmp/nannan-xhs.json
+
+      - name: 抓取小江小红书 ← 等拿到ID后更新
+        run: echo '{"items":[]}' > /tmp/xiaojiang-xhs.json
 
       - name: 停止 RSSHub
         run: docker stop rsshub
