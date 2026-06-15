@@ -46,9 +46,22 @@
   renderGallery();
   renderBigDays();
   initUtterances();
+  initBackToTop();
 
   console.log(`💕 CP Archive ready — ${data.moments.length} moments loaded.`);
 })();
+
+/** Back to top button */
+function initBackToTop() {
+  var btn = document.getElementById('backToTop');
+  if (!btn) return;
+  window.addEventListener('scroll', function() {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
 
 // ============================================================
 // Big Days — 纪念日 & 生日倒计时

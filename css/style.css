@@ -180,7 +180,29 @@ body {
 
 .bigday-item.is-today {
   border: 2px solid var(--coral);
-  animation: dotPulse 2s ease-in-out infinite;
+  background: linear-gradient(135deg, #FFF0F5, #FFE4E1, #FFF5EE);
+  animation: todayGlow 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.bigday-item.is-today::before {
+  content: '🎉';
+  position: absolute;
+  top: -8px;
+  right: -5px;
+  font-size: 2rem;
+  animation: todaySpark 1s ease-in-out infinite;
+}
+
+@keyframes todayGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(232,160,160,0.4); }
+  50%      { box-shadow: 0 0 20px rgba(232,160,160,0.8), 0 0 40px rgba(255,182,193,0.4); }
+}
+
+@keyframes todaySpark {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50%      { transform: scale(1.3) rotate(15deg); }
 }
 
 .bigday-emoji {
@@ -411,6 +433,16 @@ body {
 
 .gallery-item:hover img {
   transform: scale(1.08);
+}
+
+/* 第一张图更大展示 */
+.gallery-item:first-child {
+  grid-column: 1 / -1;
+  aspect-ratio: 4 / 3;
+}
+
+.gallery-item:first-child img {
+  object-position: top;
 }
 
 .gallery-item-actions {
@@ -866,6 +898,39 @@ body {
   transform: translateX(-50%);
   color: rgba(255,255,255,0.7);
   font-size: 0.9rem;
+}
+
+/* ——— Back to Top ——— */
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 44px;
+  height: 44px;
+  background: var(--coral);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(200,120,120,0.35);
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  background: var(--rose);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(200,120,120,0.45);
 }
 
 /* ——— Footer ——— */
