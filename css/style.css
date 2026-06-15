@@ -330,7 +330,7 @@ body {
 
 /* ——— Left Sidebar: Gallery ——— */
 .sidebar-left {
-  width: var(--sidebar-width);
+  width: 260px;
   flex-shrink: 0;
 }
 
@@ -671,7 +671,7 @@ body {
 
 /* ——— Right Sidebar: Guestbook ——— */
 .sidebar-right {
-  width: var(--guestbook-width);
+  width: 290px;
   flex-shrink: 0;
 }
 
