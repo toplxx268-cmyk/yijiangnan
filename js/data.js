@@ -1036,7 +1036,7 @@ window.CP_DATA = {
     {
       id: "fanart-photos",
       date: "2024-07-15",
-      title: "江子 & 合照合集",
+      title: "江子 & 南南合照合集",
       category: "二创",
       images: [],
       links: [
