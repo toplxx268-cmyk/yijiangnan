@@ -15,9 +15,8 @@ window.CP_DATA = {
   // ==================== 左侧画廊图片 ====================
   // 添加图片：把图片放到 img/gallery/ 目录，在这里添加路径即可
   galleryImages: [
-    // 示例格式：
-    // { src: "img/gallery/xxx.jpg", caption: "图片描述" },
-    // 等用户放入图片后取消注释添加
+    { src: "img/gallery/IMG_2838.JPG", caption: "忆江南" },
+    { src: "img/gallery/6812451803a3745951cc2f90b0a59b07.jpeg", caption: "甜蜜合影" },
   ],
 
   // ==================== 时间线条目 ====================
