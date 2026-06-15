@@ -147,29 +147,27 @@ function renderGallery() {
   renderGalleryGrid();
 }
 
-/** 渲染分类标签 */
+/** 绑定分类标签点击事件，不重写 HTML */
 function renderGalleryTabs() {
   const tabsEl = document.getElementById('galleryTabs');
   if (!tabsEl) return;
 
-  const images = window.CP_DATA.galleryImages || [];
-  const cats = new Set(images.map(i => i.category).filter(Boolean));
-  const order = ['新鲜', '库存'];
-
-  const categories = ['全部', ...order.filter(c => cats.has(c))];
-
-  tabsEl.innerHTML = categories.map(cat => {
-    const active = cat === galleryActiveCategory ? ' active' : '';
-    return `<button class="gallery-tab${active}" data-cat="${cat}">${cat}</button>`;
-  }).join('');
-
+  // 高亮当前选中分类
   tabsEl.querySelectorAll('.gallery-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.classList.toggle('active', btn.dataset.cat === galleryActiveCategory);
+  });
+
+  // 绑定点击事件（只绑定一次）
+  if (!tabsEl._bound) {
+    tabsEl._bound = true;
+    tabsEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.gallery-tab');
+      if (!btn) return;
       galleryActiveCategory = btn.dataset.cat;
       renderGalleryTabs();
       renderGalleryGrid();
     });
-  });
+  }
 }
 
 /** 渲染图片网格 */
