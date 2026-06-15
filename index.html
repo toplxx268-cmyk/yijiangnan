@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>忆江南 — 我们的故事</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💕</text></svg>">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header-overlay"></div>
+    <div class="header-content">
+      <h1 class="site-title"></h1>
+      <p class="site-subtitle"></p>
+      <div class="days-counter">
+        <span class="commemoration">纪念日 2024年4月9日</span>
+        <div class="days-row">
+          <span class="days-number"></span>
+          <span class="days-label">天</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-decoration">
+      <span class="floating-heart">💕</span>
+      <span class="floating-heart">💖</span>
+      <span class="floating-heart">✨</span>
+      <span class="floating-heart">💗</span>
+      <span class="floating-heart">🌟</span>
+    </div>
+  </header>
+
+  <!-- Toolbar -->
+  <div class="toolbar" id="toolbar">
+    <div class="toolbar-inner">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜索我们的故事... (Ctrl+K)">
+        <button class="search-clear" id="searchClear" aria-label="清除搜索">&times;</button>
+      </div>
+      <div class="tag-filters" id="tagFilters">
+        <!-- 分类筛选按钮由 JS 渲染 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 三栏布局 -->
+  <div class="main-layout">
+
+    <!-- 左侧：图片展览区 -->
+    <aside class="sidebar sidebar-left" id="gallerySidebar">
+      <div class="gallery-panel">
+        <h3 class="gallery-title">🖼️ 美图合集</h3>
+
+        <!-- 上传区 -->
+        <div class="gallery-upload" id="galleryUpload">
+          <label class="upload-btn" for="galleryFileInput" title="上传图片（存储在本地浏览器）">
+            📤 上传图片
+          </label>
+          <input type="file" id="galleryFileInput" accept="image/*" multiple hidden>
+          <p class="upload-hint">图片保存在本地浏览器中</p>
+        </div>
+
+        <!-- 图片网格 -->
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- JS 渲染 -->
+        </div>
+
+        <!-- 空状态 -->
+        <div class="gallery-empty" id="galleryEmpty">
+          <p class="gallery-empty-icon">📷</p>
+          <p class="gallery-empty-text">还没有图片</p>
+          <p class="gallery-empty-hint">点击上方按钮上传，或将图片放入
+            <code>img/gallery/</code> 目录并在 <code>data.js</code> 中添加</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 中间：时间线 -->
+    <main class="timeline" id="timeline">
+      <!-- 时间线条目由 JS 渲染 -->
+    </main>
+
+    <!-- 右侧：留言板 -->
+    <aside class="sidebar sidebar-right" id="guestbookSidebar">
+      <div class="guestbook">
+        <h3 class="guestbook-title">💌 粉丝留言</h3>
+
+        <!-- 留言输入表单 -->
+        <form class="guestbook-form" id="guestbookForm">
+          <input type="text" class="guestbook-input" id="guestbookName"
+                 placeholder="你的昵称" maxlength="20" required>
+          <textarea class="guestbook-textarea" id="guestbookMsg"
+                    placeholder="写下你想对忆江南说的话..."
+                    rows="3" maxlength="300" required></textarea>
+          <button type="submit" class="guestbook-submit">💕 提交留言</button>
+        </form>
+
+        <!-- 留言列表 -->
+        <div class="guestbook-messages" id="guestbookMessages">
+          <!-- 留言由 JS 渲染 -->
+        </div>
+
+        <div class="guestbook-footer">
+          <a href="https://weibo.com/ttarticle/x/m/show#/id=2309405214849822490964" target="_blank" rel="noopener" class="guestbook-link">👉 前往微博原文</a>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- No Results -->
+  <div class="no-results" id="noResults" hidden>
+    <p class="no-results-emoji">🔍</p>
+    <p class="no-results-text">没有找到匹配 "<span id="noResultsQuery"></span>" 的记录</p>
+    <p class="no-results-hint">试试其他关键词或清除筛选条件</p>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" hidden>
+    <div class="lightbox-backdrop"></div>
+    <button class="lightbox-close" aria-label="关闭">&times;</button>
+    <button class="lightbox-prev" aria-label="上一张">‹</button>
+    <button class="lightbox-next" aria-label="下一张">›</button>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightboxImg">
+      <div class="lightbox-counter" id="lightboxCounter"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>💕 我们的故事，未完待续 💕</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/timeline.js"></script>
+  <script src="js/tags.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
