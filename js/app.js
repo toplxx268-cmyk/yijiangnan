@@ -44,10 +44,97 @@
   initCategoryFilters();
   initSearch();
   renderGallery();
+  renderBigDays();
   initUtterances();
 
   console.log(`💕 CP Archive ready — ${data.moments.length} moments loaded.`);
 })();
+
+// ============================================================
+// Big Days — 纪念日 & 生日倒计时
+// ============================================================
+
+function renderBigDays() {
+  const bar = document.getElementById('bigdayBar');
+  if (!bar) return;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const startDate = new Date(window.CP_DATA.meta.startDate);
+
+  // 计算周年（基于 startDate）
+  const anniversaries = [];
+  for (let y = 1; y <= 2; y++) {
+    const annDate = new Date(startDate);
+    annDate.setFullYear(startDate.getFullYear() + y);
+    anniversaries.push({
+      label: `${y}周年`,
+      date: annDate,
+      emoji: '💕',
+      type: 'anniversary'
+    });
+  }
+
+  // 生日
+  const birthdays = [];
+  if (window.CP_DATA.meta.birthdays) {
+    const b = window.CP_DATA.meta.birthdays;
+    if (b.nannan) {
+      birthdays.push({
+        label: '南南生日',
+        date: getNextBirthday(b.nannan, today),
+        emoji: '🌸',
+        type: 'birthday'
+      });
+    }
+    if (b.xiaojiang) {
+      birthdays.push({
+        label: '小江生日',
+        date: getNextBirthday(b.xiaojiang, today),
+        emoji: '🌟',
+        type: 'birthday'
+      });
+    }
+  }
+
+  const allDays = [...anniversaries, ...birthdays].sort((a, b) => a.date - b.date);
+
+  bar.innerHTML = allDays.map(d => {
+    const diffDays = Math.ceil((d.date - today) / (1000 * 60 * 60 * 24));
+    let status;
+
+    if (diffDays === 0) {
+      status = `<span class="bigday-today">🎉 今天！</span>`;
+    } else if (diffDays > 0) {
+      status = `<span class="bigday-countdown">还有 <strong>${diffDays}</strong> 天</span>`;
+    } else {
+      status = `<span class="bigday-passed">已过 ${Math.abs(diffDays)} 天</span>`;
+    }
+
+    return `
+      <div class="bigday-item ${diffDays === 0 ? 'is-today' : ''}">
+        <span class="bigday-emoji">${d.emoji}</span>
+        <div class="bigday-info">
+          <span class="bigday-label">${d.label}</span>
+          <span class="bigday-date">${formatBigDay(d.date)}</span>
+          ${status}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/** 计算下一个生日/纪念日的日期 */
+function getNextBirthday(mmdd, today) {
+  const [m, d] = mmdd.split('-').map(Number);
+  const thisYear = new Date(today.getFullYear(), m - 1, d);
+  if (thisYear >= today) return thisYear;
+  return new Date(today.getFullYear() + 1, m - 1, d);
+}
+
+function formatBigDay(date) {
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+}
 
 // ============================================================
 // Gallery — 左侧美图合集（仅展示 data.js galleryImages）

@@ -153,6 +153,81 @@ body {
 }
 
 /* ============================================================
+   Big Day Banner — 纪念日 & 生日提醒
+   ============================================================ */
+
+.bigday-bar {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #FFF0F3, #FFF5F0);
+  border-bottom: 1px solid rgba(232,160,160,0.2);
+  flex-wrap: wrap;
+}
+
+.bigday-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border-radius: 14px;
+  padding: 10px 18px;
+  box-shadow: var(--shadow);
+  min-width: 170px;
+  transition: var(--transition);
+}
+
+.bigday-item.is-today {
+  border: 2px solid var(--coral);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+.bigday-emoji {
+  font-size: 1.6rem;
+}
+
+.bigday-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.bigday-label {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.bigday-date {
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+
+.bigday-countdown {
+  font-size: 0.8rem;
+  color: var(--coral-dark);
+}
+
+.bigday-countdown strong {
+  font-size: 1rem;
+  font-family: var(--font-display);
+}
+
+.bigday-today {
+  font-size: 0.85rem;
+  color: var(--coral-dark);
+  font-weight: 700;
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+.bigday-passed {
+  font-size: 0.78rem;
+  color: var(--text-lighter);
+}
+
+/* ============================================================
    Toolbar (sticky)
    ============================================================ */
 
@@ -843,6 +918,17 @@ body {
 
 /* ≤480px: 手机优化 */
 @media (max-width: 480px) {
+  .bigday-bar {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .bigday-item {
+    min-width: 0;
+    flex: 1 1 45%;
+    padding: 8px 12px;
+  }
+
   .header {
     padding: 40px 14px 32px;
   }

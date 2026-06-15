@@ -7,9 +7,13 @@
 window.CP_DATA = {
   meta: {
     coupleName: "忆江南cp 💕",
-    subtitle: "爱的足迹👣",
+    subtitle: "@一枝南南&江星熠 爱的足迹👣",
     startDate: "2024-04-09",
     headerImage: "img/gallery/IMG_2838.JPG",
+    birthdays: {
+      nannan: "06-20",   // 一枝南南
+      xiaojiang: "11-23" // 江星熠
+    }
   },
 
   // ==================== 左侧画廊图片 ====================
