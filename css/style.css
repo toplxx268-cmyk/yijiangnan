@@ -336,6 +336,10 @@ body {
   top: 100px;
 }
 
+.sidebar-left .gallery-panel {
+  min-height: 200px;
+}
+
 .gallery-panel {
   background: var(--card);
   border-radius: var(--radius);
@@ -673,6 +677,10 @@ body {
   flex-shrink: 0;
   position: sticky;
   top: 100px;
+}
+
+.sidebar-right .guestbook {
+  min-height: 200px;
 }
 
 .guestbook {
