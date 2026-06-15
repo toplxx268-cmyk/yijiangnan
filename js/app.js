@@ -142,53 +142,72 @@ function formatBigDay(date) {
 
 let galleryActiveCategory = '全部';
 
+let galleryCat = '全部';
+
 function renderGallery() {
   bindGalleryTabs();
-  bindGalleryImages();
+  renderGalleryGrid();
 }
 
-/** 分类标签点击 */
 function bindGalleryTabs() {
-  const tabsEl = document.getElementById('galleryTabs');
-  if (!tabsEl || tabsEl._bound) return;
-  tabsEl._bound = true;
-
-  tabsEl.addEventListener('click', (e) => {
-    const btn = e.target.closest('.gallery-tab');
+  var tabs = document.getElementById('galleryTabs');
+  if (!tabs || tabs._bound) return;
+  tabs._bound = true;
+  tabs.addEventListener('click', function(e) {
+    var btn = e.target.closest('.gallery-tab');
     if (!btn) return;
-    tabsEl.querySelectorAll('.gallery-tab').forEach(b => b.classList.remove('active'));
+    tabs.querySelectorAll('.gallery-tab').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
-    filterGalleryByCategory(btn.dataset.cat);
+    galleryCat = btn.dataset.cat;
+    renderGalleryGrid();
   });
 }
 
-/** 按分类过滤图片 */
-function filterGalleryByCategory(cat) {
-  const items = document.querySelectorAll('#galleryGrid .gallery-item');
-  items.forEach(item => {
-    const itemCat = item.dataset.category || '';
-    if (cat === '全部' || itemCat === cat) {
-      item.style.display = '';
-    } else {
-      item.style.display = 'none';
-    }
-  });
-}
+function renderGalleryGrid() {
+  var grid = document.getElementById('galleryGrid');
+  if (!grid) return;
+  var all = window.CP_DATA.galleryImages || [];
+  var list = galleryCat === '全部' ? all : all.filter(function(i) { return i.category === galleryCat; });
+  grid.innerHTML = '';
 
-/** 给图片绑定灯箱点击 */
-function bindGalleryImages() {
-  const grid = document.getElementById('galleryGrid');
-  if (!grid || grid._bound) return;
-  grid._bound = true;
+  for (var i = 0; i < list.length; i++) {
+    (function(img, idx) {
+      var item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.setAttribute('data-category', img.category || '');
 
-  grid.addEventListener('click', (e) => {
-    const img = e.target.closest('.gallery-item img');
-    if (!img) return;
-    const allImgs = [...grid.querySelectorAll('.gallery-item:not([style*="display: none"]) img')];
-    const srcs = allImgs.map(i => i.src);
-    const idx = allImgs.indexOf(img);
-    Lightbox.open(srcs, idx >= 0 ? idx : 0);
-  });
+      var el = document.createElement('img');
+      el.src = img.src;
+      el.alt = img.caption || '';
+      el.loading = 'lazy';
+      el.onclick = function() {
+        var srcs = (galleryCat === '全部' ? all : list).map(function(x) { return x.src; });
+        Lightbox.open(srcs, galleryCat === '全部' ? idx : all.indexOf(img));
+      };
+
+      var dl = document.createElement('button');
+      dl.className = 'gallery-download-btn';
+      dl.title = '下载';
+      dl.innerHTML = '⬇';
+      dl.onclick = function(e) { e.stopPropagation(); downloadImage(img.src, img.caption || 'image'); };
+
+      var actions = document.createElement('div');
+      actions.className = 'gallery-item-actions';
+      actions.appendChild(dl);
+
+      item.appendChild(el);
+      item.appendChild(actions);
+
+      if (img.caption) {
+        var cap = document.createElement('div');
+        cap.className = 'gallery-caption';
+        cap.textContent = img.caption;
+        item.appendChild(cap);
+      }
+
+      grid.appendChild(item);
+    })(list[i], i);
+  }
 }
 
 function downloadImage(src, filename) {
