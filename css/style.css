@@ -1,6 +1,6 @@
 /* ============================================================
    CP Archive — 样式表
-   三栏布局 | 版头大图 | 左侧画廊 | 右侧超话 | 移动端响应式
+   三栏布局 | 版头大图 | 左侧画廊 | 右侧链接 | 移动端响应式
    ============================================================ */
 
 /* ——— CSS Variables ——— */
@@ -763,104 +763,111 @@ body {
 
 .entry-link:hover { background: var(--coral); color: #fff; }
 
-/* ——— Right Sidebar: SuperTopic ——— */
+/* ——— Right Sidebar: Links ——— */
 .sidebar-right {
   width: 290px;
   flex-shrink: 0;
 }
 
-.supertopic-panel {
+.links-panel {
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 18px;
-  min-height: 200px;
 }
 
-.supertopic-title {
+.links-title {
   font-family: var(--font-display);
   font-size: 1.1rem;
   color: var(--text);
-  margin-bottom: 4px;
+  margin-bottom: 14px;
   padding-bottom: 10px;
   border-bottom: 2px solid var(--pink);
   text-align: center;
 }
 
-.supertopic-subtitle {
-  font-size: 0.78rem;
-  color: var(--text-lighter);
-  text-align: center;
-  margin-bottom: 12px;
-  line-height: 1.5;
-}
-
-.supertopic-list {
+.link-card {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-height: 520px;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
-
-.supertopic-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  background: var(--bg);
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
   border-radius: var(--radius-sm);
-  padding: 10px 12px;
   text-decoration: none;
-  color: var(--text);
   transition: var(--transition);
+  margin-bottom: 6px;
 }
 
-.supertopic-item:hover {
-  background: var(--pink);
+.link-card:hover {
   transform: translateX(3px);
 }
 
-.supertopic-text {
-  font-size: 0.85rem;
-  color: var(--text);
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.link-supertopic {
+  background: linear-gradient(135deg, #FFF0F3, #FFE4E8);
+  border: 1.5px solid var(--pink);
 }
 
-.supertopic-meta {
+.link-supertopic:hover {
+  background: linear-gradient(135deg, #FFE4E8, #FFD4DC);
+}
+
+.link-nannan {
+  background: #FFF5F7;
+}
+
+.link-nannan:hover {
+  background: #FFE8EC;
+}
+
+.link-xiaojiang {
+  background: #FFF8F5;
+}
+
+.link-xiaojiang:hover {
+  background: #FFEDE4;
+}
+
+.link-small {
+  background: var(--bg);
+  padding: 10px 14px;
+}
+
+.link-small:hover {
+  background: #F5EDED;
+}
+
+.link-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: center;
+  background: rgba(255,255,255,0.7);
+  border-radius: 50%;
 }
 
-.supertopic-author {
-  font-size: 0.75rem;
-  color: var(--coral-dark);
+.link-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.link-label {
+  font-size: 0.9rem;
   font-weight: 600;
+  color: var(--text);
 }
 
-.supertopic-date {
-  font-size: 0.73rem;
+.link-desc {
+  font-size: 0.75rem;
   color: var(--text-lighter);
 }
 
-.supertopic-updated {
-  font-size: 0.73rem;
-  color: var(--text-lighter);
-  text-align: center;
-}
-
-.supertopic-empty {
-  text-align: center;
-  font-size: 0.83rem;
-  color: var(--text-lighter);
-  padding: 30px 10px;
-  line-height: 1.6;
+.links-divider {
+  height: 1px;
+  background: rgba(200,160,160,0.15);
+  margin: 10px 0;
 }
 
 /* ——— No Results ——— */
@@ -1042,8 +1049,8 @@ body {
     padding: 14px;
   }
 
-  .supertopic-list {
-    max-height: 300px;
+  .links-panel {
+    padding: 14px;
   }
 
   .timeline {

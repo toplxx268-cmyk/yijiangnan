@@ -48,7 +48,6 @@
   renderGallery();
   renderBigDays();
   renderFeeds();
-  renderSuperTopicFeeds();
   initBackToTop();
 
   console.log(`💕 CP Archive ready — ${data.moments.length} moments loaded.`);
@@ -249,38 +248,3 @@ function downloadImage(src, filename) {
   }
 }
 
-// ============================================================
-// SuperTopic — 右侧超话最新帖子
-// ============================================================
-
-function renderSuperTopicFeeds() {
-  var posts = window.MANUAL_SUPERTOPIC_POSTS;
-  var list = document.getElementById('superTopicList');
-  var empty = document.getElementById('superTopicEmpty');
-  var updated = document.getElementById('superTopicUpdated');
-  if (!list) return;
-
-  if (!posts || posts.length === 0) {
-    if (empty) empty.hidden = false;
-    if (updated) updated.textContent = '';
-    return;
-  }
-
-  if (empty) empty.hidden = true;
-
-  list.innerHTML = posts.map(function(f) {
-    var url = f.url ? ' href="' + escapeHTML(f.url) + '" target="_blank" rel="noopener"' : '';
-    var tag = f.url ? 'a' : 'div';
-    return '<' + tag + ' class="supertopic-item"' + url + '>' +
-      '<span class="supertopic-text">' + escapeHTML(f.title || '(无文字)') + '</span>' +
-      '<span class="supertopic-meta">' +
-        (f.author ? '<span class="supertopic-author">@' + escapeHTML(f.author.slice(0, 12)) + '</span>' : '') +
-        '<span class="supertopic-date">' + (f.date || '') + '</span>' +
-      '</span>' +
-      '</' + tag + '>';
-  }).join('');
-
-  if (updated && posts[0] && posts[0].date) {
-    updated.textContent = '最近更新 ' + posts[0].date;
-  }
-}

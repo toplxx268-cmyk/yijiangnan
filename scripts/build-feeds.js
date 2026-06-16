@@ -33,21 +33,8 @@ const all = feeds
   .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 10);
 
-// 保留现有的手动超话帖子（读取 feeds.js 中的 MANUAL_SUPERTOPIC_POSTS）
-let manualPosts = '[]';
-const feedsPath = path.join(__dirname, '..', 'js', 'feeds.js');
-try {
-  const existing = fs.readFileSync(feedsPath, 'utf8');
-  const m = existing.match(/window\.MANUAL_SUPERTOPIC_POSTS\s*=\s*(\[[\s\S]*?\]);/);
-  if (m) manualPosts = m[1];
-} catch (_) {}
-
 const output = `// —— 自动生成部分（由 GitHub Actions 每6小时更新，请勿手动编辑） ——
 window.LATEST_FEEDS = ${JSON.stringify(all, null, 2)};
-
-// —— 超话精选（手动编辑，格式照下面示例） ——
-// 去微博超话复制帖子内容、链接、日期和作者昵称，贴在这里即可
-window.MANUAL_SUPERTOPIC_POSTS = ${manualPosts};
 `;
 
 fs.writeFileSync(feedsPath, output);
