@@ -13,7 +13,7 @@ jobs:
 
       - name: 启动 RSSHub
         run: |
-          docker run -d --name rsshub -p 1200:1200 rsshub/rsshub:latest
+          docker run -d --name rsshub -p 1200:1200 diygod/rsshub:latest
           sleep 15
 
       - name: 抓取南南微博
