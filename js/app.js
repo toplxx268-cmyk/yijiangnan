@@ -188,7 +188,7 @@ function formatBigDay(date) {
 }
 
 // ============================================================
-// Footprint Map — 足迹地图
+// Footprint Map — 足迹地图（GeoQ 瓦片，国内加载快）
 // ============================================================
 
 function renderFootprintMap() {
@@ -200,71 +200,49 @@ function renderFootprintMap() {
   var footprints = window.CP_DATA.footprints || [];
   if (!container || footprints.length === 0) return;
 
-  // 统计：国内去重城市 + 国外去重国家
-  var cities = {};
-  var countries = {};
+  // 统计
+  var cities = {}, countries = {};
   footprints.forEach(function(p) {
     if (p.country === '中国' && p.city) cities[p.city] = true;
     if (p.country && p.country !== '中国') countries[p.country] = true;
   });
-  var cityCount = Object.keys(cities).length;
-  var countryCount = Object.keys(countries).length;
-  var titleEl = document.querySelector('.map-panel .gallery-title');
+  var titleEl = document.getElementById('footprintTitle');
   if (titleEl) {
-    titleEl.textContent = '👣 ' + cityCount + '城·' + countryCount + '国';
-  }
-
-  // 手机端容器可能尺寸为0，强制最小尺寸
-  if (container.clientWidth === 0 || container.clientHeight === 0) {
-    container.style.width = '100%';
-    container.style.minHeight = '240px';
+    titleEl.textContent = '👣 ' + Object.keys(cities).length + '城·' + Object.keys(countries).length + '国';
   }
 
   var map = L.map(container, {
-    center: [28, 112],
+    center: [30, 110],
     zoom: 5,
-    zoomControl: true,
+    zoomControl: false,
     attributionControl: false
   });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18,
-    attribution: '&copy; OSM'
+  // GeoQ 智图瓦片 — WGS-84 坐标系，国内CDN，无需API key
+  L.tileLayer('https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 16
   }).addTo(map);
 
   footprints.forEach(function(p) {
     var icon = L.divIcon({
       className: 'footprint-marker',
       html: '<div class="fp-emoji">' + p.emoji + '</div><div class="fp-label">' + p.name + '</div>',
-      iconSize: [60, 48],
-      iconAnchor: [30, 48]
+      iconSize: [60, 44],
+      iconAnchor: [30, 44]
     });
-
-    L.marker([p.lat, p.lng], { icon: icon })
-      .addTo(map)
-      .bindPopup(
-        '<div class="fp-popup">' +
-        '<strong>' + p.emoji + ' ' + escapeHTML(p.name) + '</strong>' +
-        '<br><small>' + (p.date || '') + '</small>' +
-        '</div>'
-      );
+    L.marker([p.lat, p.lng], { icon: icon }).addTo(map)
+      .bindPopup('<div class="fp-popup"><strong>' + p.emoji + ' ' + escapeHTML(p.name) + '</strong><br><small>' + (p.date || '') + '</small></div>');
   });
 
   if (footprints.length > 1) {
-    var bounds = footprints.map(function(p) { return [p.lat, p.lng]; });
-    map.fitBounds(bounds, { padding: [25, 25], maxZoom: 7 });
+    map.fitBounds(footprints.map(function(p) { return [p.lat, p.lng]; }), { padding: [20, 20], maxZoom: 7 });
   }
 
-  // 修复移动端地图灰块：容器尺寸就绪后刷新
   var fixMap = function() { map.invalidateSize(); };
-  setTimeout(fixMap, 100);
-  setTimeout(fixMap, 400);
-  setTimeout(fixMap, 1000);
+  setTimeout(fixMap, 200);
+  setTimeout(fixMap, 600);
   window.addEventListener('resize', fixMap);
-  // ResizeObserver：容器尺寸变化时自动刷新
-  if (window.ResizeObserver) {
-    new ResizeObserver(fixMap).observe(container);
-  }
+  if (window.ResizeObserver) new ResizeObserver(fixMap).observe(container);
 }
 
 // ============================================================

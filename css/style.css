@@ -604,7 +604,6 @@ body {
   overflow: hidden;
 }
 
-/* emoji 标记 */
 .footprint-marker {
   background: none !important;
   border: none !important;
@@ -612,36 +611,31 @@ body {
 }
 
 .fp-emoji {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   line-height: 1;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
 }
 
 .fp-label {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   background: #fff;
   color: var(--text);
-  padding: 1px 6px;
+  padding: 1px 5px;
   border-radius: 8px;
   white-space: nowrap;
-  margin-top: 2px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   display: inline-block;
+  margin-top: 1px;
 }
 
-/* popup 弹窗 */
 .fp-popup {
   text-align: center;
   font-size: 0.85rem;
 }
 
-.fp-popup strong {
-  color: var(--text);
-}
+.fp-popup strong { color: var(--text); }
 
-.fp-popup small {
-  color: var(--text-lighter);
-}
+.fp-popup small { color: var(--text-lighter); }
 
 /* ——— Center: Timeline ——— */
 .timeline {
