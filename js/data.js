@@ -19,23 +19,24 @@ window.CP_DATA = {
   // ==================== 足迹地图 ====================
   // 经纬度去 https://www.openstreetmap.org 搜索获取
   footprints: [
-    { name: "海南", lat: 18.2528, lng: 109.5120, date: "24年4月", emoji: "🌴" },
-    { name: "杭州", lat: 30.2741, lng: 120.1551, date: "24年6月", emoji: "🌸" },
-    { name: "成都", lat: 30.5728, lng: 104.0668, date: "24年7月", emoji: "🐼" },
-    { name: "北京", lat: 39.9042, lng: 116.4074, date: "24年7月", emoji: "🏯" },
-    { name: "上海", lat: 31.2304, lng: 121.4737, date: "24年7月", emoji: "🌃" },
-    { name: "首尔", lat: 37.5665, lng: 126.9780, date: "24年7月", emoji: "🇰🇷" },
-    { name: "上海迪士尼", lat: 31.1443, lng: 121.6578, date: "24年8月", emoji: "🏰" },
-    { name: "清迈", lat: 18.7883, lng: 98.9853, date: "24年8月", emoji: "🛕" },
-    { name: "曼谷", lat: 13.7563, lng: 100.5018, date: "24年8月", emoji: "🌆" },
-    { name: "普吉岛", lat: 7.8804, lng: 98.3923, date: "24年8月", emoji: "🏖️" },
-    { name: "南京", lat: 32.0603, lng: 118.7969, date: "24年9月", emoji: "🏛️" },
-    { name: "秦皇岛阿那亚", lat: 39.9350, lng: 119.6000, date: "24年10月·25年8月·26年6月", emoji: "🌊" },
-    { name: "张家口崇礼", lat: 40.9747, lng: 115.2816, date: "24年12月", emoji: "🎿" },
-    { name: "来古冰川", lat: 29.3000, lng: 96.9000, date: "25年1月", emoji: "🏔️" },
-    { name: "泉州", lat: 24.8741, lng: 118.6758, date: "25年6月", emoji: "🏮" },
-    { name: "青岛", lat: 36.0671, lng: 120.3826, date: "25年11月", emoji: "🍺" },
-    { name: "洛杉矶", lat: 34.0522, lng: -118.2437, date: "26年1月", emoji: "🌎" }
+    { name: "海南", city: "三亚", country: "中国", lat: 18.2528, lng: 109.5120, date: "24年4月", emoji: "🌴" },
+    { name: "杭州", city: "杭州", country: "中国", lat: 30.2741, lng: 120.1551, date: "24年6月", emoji: "🌸" },
+    { name: "成都", city: "成都", country: "中国", lat: 30.5728, lng: 104.0668, date: "24年7月", emoji: "🐼" },
+    { name: "北京", city: "北京", country: "中国", lat: 39.9042, lng: 116.4074, date: "24年7月", emoji: "🏯" },
+    { name: "上海", city: "上海", country: "中国", lat: 31.2304, lng: 121.4737, date: "24年7月", emoji: "🌃" },
+    { name: "首尔", city: "", country: "韩国", lat: 37.5665, lng: 126.9780, date: "24年7月", emoji: "🇰🇷" },
+    { name: "上海迪士尼", city: "上海", country: "中国", lat: 31.1443, lng: 121.6578, date: "24年8月", emoji: "🏰" },
+    { name: "清迈", city: "", country: "泰国", lat: 18.7883, lng: 98.9853, date: "24年8月", emoji: "🛕" },
+    { name: "曼谷", city: "", country: "泰国", lat: 13.7563, lng: 100.5018, date: "24年8月", emoji: "🌆" },
+    { name: "普吉岛", city: "", country: "泰国", lat: 7.8804, lng: 98.3923, date: "24年8月", emoji: "🏖️" },
+    { name: "南京", city: "南京", country: "中国", lat: 32.0603, lng: 118.7969, date: "24年9月", emoji: "🏛️" },
+    { name: "秦皇岛阿那亚", city: "秦皇岛", country: "中国", lat: 39.9350, lng: 119.6000, date: "24年10月·25年8月·26年6月", emoji: "🌊" },
+    { name: "张家口崇礼", city: "张家口", country: "中国", lat: 40.9747, lng: 115.2816, date: "24年12月", emoji: "🎿" },
+    { name: "来古冰川", city: "昌都", country: "中国", lat: 29.3000, lng: 96.9000, date: "25年1月", emoji: "🏔️" },
+    { name: "泉州", city: "泉州", country: "中国", lat: 24.8741, lng: 118.6758, date: "25年6月", emoji: "🏮" },
+    { name: "青岛", city: "青岛", country: "中国", lat: 36.0671, lng: 120.3826, date: "25年11月", emoji: "🍺" },
+    { name: "土耳其", city: "", country: "土耳其", lat: 38.9637, lng: 35.2433, date: "25年12月", emoji: "🕌" },
+    { name: "洛杉矶", city: "", country: "美国", lat: 34.0522, lng: -118.2437, date: "26年1月", emoji: "🌎" }
   ],
 
   // ==================== 左侧画廊图片 ====================

@@ -200,6 +200,20 @@ function renderFootprintMap() {
   var footprints = window.CP_DATA.footprints || [];
   if (!container || footprints.length === 0) return;
 
+  // 统计：国内去重城市 + 国外去重国家
+  var cities = {};
+  var countries = {};
+  footprints.forEach(function(p) {
+    if (p.country === '中国' && p.city) cities[p.city] = true;
+    if (p.country && p.country !== '中国') countries[p.country] = true;
+  });
+  var cityCount = Object.keys(cities).length;
+  var countryCount = Object.keys(countries).length;
+  var titleEl = document.querySelector('.map-panel .gallery-title');
+  if (titleEl) {
+    titleEl.textContent = '👣 ' + cityCount + '城·' + countryCount + '国';
+  }
+
   // 手机端容器可能高度为0，强制设一个
   if (container.clientHeight === 0) {
     container.style.height = '240px';
