@@ -200,6 +200,11 @@ function renderFootprintMap() {
   var footprints = window.CP_DATA.footprints || [];
   if (!container || footprints.length === 0) return;
 
+  // 手机端容器可能高度为0，强制设一个
+  if (container.clientHeight === 0) {
+    container.style.height = '240px';
+  }
+
   var map = L.map(container, {
     center: [28, 112],
     zoom: 5,
@@ -207,9 +212,11 @@ function renderFootprintMap() {
     attributionControl: false
   });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  // 高德地图瓦片（国内加载快）
+  L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+    subdomains: '1234',
     maxZoom: 18,
-    attribution: '&copy; OpenStreetMap'
+    attribution: '&copy; 高德地图'
   }).addTo(map);
 
   footprints.forEach(function(p) {
