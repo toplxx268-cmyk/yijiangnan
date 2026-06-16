@@ -214,9 +214,10 @@ function renderFootprintMap() {
     titleEl.textContent = '👣 ' + cityCount + '城·' + countryCount + '国';
   }
 
-  // 手机端容器可能高度为0，强制设一个
-  if (container.clientHeight === 0) {
-    container.style.height = '240px';
+  // 手机端容器可能尺寸为0，强制最小尺寸
+  if (container.clientWidth === 0 || container.clientHeight === 0) {
+    container.style.width = '100%';
+    container.style.minHeight = '240px';
   }
 
   var map = L.map(container, {
@@ -254,10 +255,16 @@ function renderFootprintMap() {
     map.fitBounds(bounds, { padding: [25, 25], maxZoom: 7 });
   }
 
-  // 修复移动端/切换时地图灰块：多次触发 invalidateSize
-  setTimeout(function() { map.invalidateSize(); }, 100);
-  setTimeout(function() { map.invalidateSize(); }, 500);
-  window.addEventListener('resize', function() { map.invalidateSize(); });
+  // 修复移动端地图灰块：容器尺寸就绪后刷新
+  var fixMap = function() { map.invalidateSize(); };
+  setTimeout(fixMap, 100);
+  setTimeout(fixMap, 400);
+  setTimeout(fixMap, 1000);
+  window.addEventListener('resize', fixMap);
+  // ResizeObserver：容器尺寸变化时自动刷新
+  if (window.ResizeObserver) {
+    new ResizeObserver(fixMap).observe(container);
+  }
 }
 
 // ============================================================
