@@ -788,10 +788,11 @@ body {
 
 /* ——— 平台卡片 ——— */
 .platform-card {
-  background: var(--bg);
+  background: #fff;
   border-radius: var(--radius-sm);
   padding: 10px 12px;
   margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(180,140,140,0.08);
 }
 
 .weibo-card {
