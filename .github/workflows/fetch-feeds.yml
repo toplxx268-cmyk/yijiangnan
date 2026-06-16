@@ -37,10 +37,13 @@ jobs:
       - name: 停止 RSSHub
         run: docker stop rsshub
 
-      - name: 抓取忆江南cp超话 (Vercel 代理)
-        run: |
-          curl -s -m 30 "${{ vars.VERCEL_PROXY_URL || 'https://yijiangnan.vercel.app' }}/api/supertopic" \
-            > /tmp/supertopic.json 2>&1 || echo '{"ok":0}' > /tmp/supertopic.json
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 抓取忆江南cp超话 (cloudscraper)
+        run: python scripts/fetch-supertopic.py
 
       - name: 生成 feeds.js
         run: node scripts/build-feeds.js
