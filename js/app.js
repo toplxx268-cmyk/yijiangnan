@@ -226,11 +226,9 @@ function renderFootprintMap() {
     attributionControl: false
   });
 
-  // 高德地图瓦片（国内加载快）
-  L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
-    subdomains: '1234',
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
-    attribution: '&copy; 高德地图'
+    attribution: '&copy; OSM'
   }).addTo(map);
 
   footprints.forEach(function(p) {
