@@ -193,6 +193,10 @@ function formatBigDay(date) {
 
 function renderFootprintMap() {
   var container = document.getElementById('footprintMap');
+  if (typeof L === 'undefined') {
+    if (container) container.parentElement.style.display = 'none';
+    return;
+  }
   var footprints = window.CP_DATA.footprints || [];
   if (!container || footprints.length === 0) return;
 
@@ -203,8 +207,9 @@ function renderFootprintMap() {
     attributionControl: false
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    maxZoom: 18
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; OpenStreetMap'
   }).addTo(map);
 
   footprints.forEach(function(p) {
