@@ -19,31 +19,6 @@ function parseFeed(filePath, author, platform) {
   }
 }
 
-function parseSuperTopicFeed(filePath) {
-  try {
-    const raw = fs.readFileSync(filePath, 'utf8');
-    const data = JSON.parse(raw);
-    if (!data.ok || !data.data || !data.data.cards) return [];
-
-    const items = [];
-    for (const card of data.data.cards) {
-      if (card.card_type === 9 && card.mblog) {
-        const m = card.mblog;
-        items.push({
-          title: (m.text || '').replace(/<[^>]*>/g, '').slice(0, 80),
-          url: m.id ? `https://m.weibo.cn/detail/${m.id}` : (m.scheme || ''),
-          date: (m.created_at || '').slice(0, 10),
-          author: (m.user && m.user.screen_name) ? m.user.screen_name : ''
-        });
-      }
-      if (items.length >= 5) break; // 只要最新5条
-    }
-    return items;
-  } catch (e) {
-    return [];
-  }
-}
-
 const feeds = [
   ...parseFeed('/tmp/nannan-weibo.json', '南南', '微博'),
   ...parseFeed('/tmp/xiaojiang-weibo.json', '小江', '微博'),
@@ -58,15 +33,22 @@ const all = feeds
   .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 10);
 
-// 超话最新帖子
-const supertopicFeeds = parseSuperTopicFeed('/tmp/supertopic.json');
+// 保留现有的手动超话帖子（读取 feeds.js 中的 MANUAL_SUPERTOPIC_POSTS）
+let manualPosts = '[]';
+const feedsPath = path.join(__dirname, '..', 'js', 'feeds.js');
+try {
+  const existing = fs.readFileSync(feedsPath, 'utf8');
+  const m = existing.match(/window\.MANUAL_SUPERTOPIC_POSTS\s*=\s*(\[[\s\S]*?\]);/);
+  if (m) manualPosts = m[1];
+} catch (_) {}
 
-const output = `// 自动生成，请勿手动编辑
-// 每6小时由 GitHub Actions 更新
+const output = `// —— 自动生成部分（由 GitHub Actions 每6小时更新，请勿手动编辑） ——
 window.LATEST_FEEDS = ${JSON.stringify(all, null, 2)};
 
-window.LATEST_SUPERTOPIC_FEEDS = ${JSON.stringify(supertopicFeeds, null, 2)};
+// —— 超话精选（手动编辑，格式照下面示例） ——
+// 去微博超话复制帖子内容、链接、日期和作者昵称，贴在这里即可
+window.MANUAL_SUPERTOPIC_POSTS = ${manualPosts};
 `;
 
-fs.writeFileSync(path.join(__dirname, '..', 'js', 'feeds.js'), output);
-console.log(`Generated feeds.js with ${all.length} personal items + ${supertopicFeeds.length} supertopic items`);
+fs.writeFileSync(feedsPath, output);
+console.log(`Generated feeds.js with ${all.length} personal items`);

@@ -254,30 +254,33 @@ function downloadImage(src, filename) {
 // ============================================================
 
 function renderSuperTopicFeeds() {
-  var feeds = window.LATEST_SUPERTOPIC_FEEDS;
+  var posts = window.MANUAL_SUPERTOPIC_POSTS;
   var list = document.getElementById('superTopicList');
   var empty = document.getElementById('superTopicEmpty');
   var updated = document.getElementById('superTopicUpdated');
   if (!list) return;
 
-  if (!feeds || feeds.length === 0) {
+  if (!posts || posts.length === 0) {
     if (empty) empty.hidden = false;
+    if (updated) updated.textContent = '';
     return;
   }
 
   if (empty) empty.hidden = true;
 
-  list.innerHTML = feeds.map(function(f) {
-    return '<a class="supertopic-item" href="' + escapeHTML(f.url) + '" target="_blank" rel="noopener">' +
+  list.innerHTML = posts.map(function(f) {
+    var url = f.url ? ' href="' + escapeHTML(f.url) + '" target="_blank" rel="noopener"' : '';
+    var tag = f.url ? 'a' : 'div';
+    return '<' + tag + ' class="supertopic-item"' + url + '>' +
       '<span class="supertopic-text">' + escapeHTML(f.title || '(无文字)') + '</span>' +
       '<span class="supertopic-meta">' +
         (f.author ? '<span class="supertopic-author">@' + escapeHTML(f.author.slice(0, 12)) + '</span>' : '') +
         '<span class="supertopic-date">' + (f.date || '') + '</span>' +
       '</span>' +
-      '</a>';
+      '</' + tag + '>';
   }).join('');
 
-  if (feeds[0] && feeds[0].date) {
-    updated.textContent = '更新于 ' + feeds[0].date;
+  if (updated && posts[0] && posts[0].date) {
+    updated.textContent = '最近更新 ' + posts[0].date;
   }
 }
