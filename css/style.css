@@ -593,6 +593,56 @@ body {
   font-size: 0.72rem;
 }
 
+/* ——— Footprint Map ——— */
+.map-panel {
+  margin-top: 16px;
+}
+
+.map-container {
+  height: 240px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* emoji 标记 */
+.footprint-marker {
+  background: none !important;
+  border: none !important;
+  text-align: center;
+}
+
+.fp-emoji {
+  font-size: 1.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+
+.fp-label {
+  font-size: 0.62rem;
+  background: #fff;
+  color: var(--text);
+  padding: 1px 6px;
+  border-radius: 8px;
+  white-space: nowrap;
+  margin-top: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  display: inline-block;
+}
+
+/* popup 弹窗 */
+.fp-popup {
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.fp-popup strong {
+  color: var(--text);
+}
+
+.fp-popup small {
+  color: var(--text-lighter);
+}
+
 /* ——— Center: Timeline ——— */
 .timeline {
   flex: 1;

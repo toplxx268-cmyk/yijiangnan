@@ -16,6 +16,19 @@ window.CP_DATA = {
     }
   },
 
+  // ==================== 足迹地图 ====================
+  // 经纬度去 https://www.openstreetmap.org 搜索获取
+  footprints: [
+    { name: "上海时装周", lat: 31.2304, lng: 121.4737, date: "2024-10", emoji: "👗" },
+    { name: "北京环球影城", lat: 39.7884, lng: 116.6768, date: "2024-11", emoji: "🎢" },
+    { name: "三亚直播", lat: 18.2528, lng: 109.5120, date: "2025-02", emoji: "🌴" },
+    { name: "泰国旅行", lat: 13.7563, lng: 100.5018, date: "2025-03", emoji: "✈️" },
+    { name: "成都 vlog", lat: 30.5728, lng: 104.0668, date: "2024-09", emoji: "🐼" },
+    { name: "杭州大屏", lat: 30.2741, lng: 120.1551, date: "2024-06", emoji: "🎂" },
+    { name: "台北大屏", lat: 25.0330, lng: 121.5654, date: "2024-06", emoji: "🎂" },
+    { name: "长沙", lat: 28.2282, lng: 112.9388, date: "2024-10", emoji: "🔥" }
+  },
+
   // ==================== 左侧画廊图片 ====================
   // 新增图片：放文件到 img/gallery/，在这里加 { src: "路径", caption: "描述" }
   galleryImages: [

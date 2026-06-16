@@ -48,6 +48,7 @@
   renderGallery();
   renderBigDays();
   renderFeeds();
+  renderFootprintMap();
   initBackToTop();
 
   console.log(`💕 CP Archive ready — ${data.moments.length} moments loaded.`);
@@ -184,6 +185,52 @@ function getNextBirthday(mmdd, today) {
 
 function formatBigDay(date) {
   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+}
+
+// ============================================================
+// Footprint Map — 足迹地图
+// ============================================================
+
+function renderFootprintMap() {
+  var container = document.getElementById('footprintMap');
+  var footprints = window.CP_DATA.footprints || [];
+  if (!container || footprints.length === 0) return;
+
+  var map = L.map(container, {
+    center: [28, 112],
+    zoom: 5,
+    zoomControl: true,
+    attributionControl: false
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18
+  }).addTo(map);
+
+  footprints.forEach(function(p) {
+    var icon = L.divIcon({
+      className: 'footprint-marker',
+      html: '<div class="fp-emoji">' + p.emoji + '</div><div class="fp-label">' + p.name + '</div>',
+      iconSize: [60, 48],
+      iconAnchor: [30, 48]
+    });
+
+    L.marker([p.lat, p.lng], { icon: icon })
+      .addTo(map)
+      .bindPopup(
+        '<div class="fp-popup">' +
+        '<strong>' + p.emoji + ' ' + escapeHTML(p.name) + '</strong>' +
+        '<br><small>' + (p.date || '') + '</small>' +
+        '</div>'
+      );
+  });
+
+  if (footprints.length > 1) {
+    var bounds = footprints.map(function(p) { return [p.lat, p.lng]; });
+    map.fitBounds(bounds, { padding: [25, 25], maxZoom: 7 });
+  }
+
+  setTimeout(function() { map.invalidateSize(); }, 200);
 }
 
 // ============================================================
