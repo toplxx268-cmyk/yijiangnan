@@ -235,7 +235,10 @@ function renderFootprintMap() {
     map.fitBounds(bounds, { padding: [25, 25], maxZoom: 7 });
   }
 
-  setTimeout(function() { map.invalidateSize(); }, 200);
+  // 修复移动端/切换时地图灰块：多次触发 invalidateSize
+  setTimeout(function() { map.invalidateSize(); }, 100);
+  setTimeout(function() { map.invalidateSize(); }, 500);
+  window.addEventListener('resize', function() { map.invalidateSize(); });
 }
 
 // ============================================================
