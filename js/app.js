@@ -48,11 +48,18 @@
   renderGallery();
   renderBigDays();
   renderFeeds();
-  initUtterances();
+  renderSuperTopicFeeds();
   initBackToTop();
 
   console.log(`💕 CP Archive ready — ${data.moments.length} moments loaded.`);
 })();
+
+/** HTML 转义，防止 XSS */
+function escapeHTML(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
 
 /** Back to top button */
 /** 渲染最新动态概览 */
@@ -243,21 +250,34 @@ function downloadImage(src, filename) {
 }
 
 // ============================================================
-// Utterances — GitHub Issues 留言（所有人可见）
+// SuperTopic — 右侧超话最新帖子
 // ============================================================
 
-function initUtterances() {
-  const container = document.getElementById('utterances-comments');
-  if (!container) return;
+function renderSuperTopicFeeds() {
+  var feeds = window.LATEST_SUPERTOPIC_FEEDS;
+  var list = document.getElementById('superTopicList');
+  var empty = document.getElementById('superTopicEmpty');
+  var updated = document.getElementById('superTopicUpdated');
+  if (!list) return;
 
-  const script = document.createElement('script');
-  script.src = 'https://utteranc.es/client.js';
-  script.setAttribute('repo', 'toplxx268-cmyk/yijiangnan');
-  script.setAttribute('issue-term', 'pathname');
-  script.setAttribute('theme', 'github-light');
-  script.setAttribute('label', '💬 留言');
-  script.crossOrigin = 'anonymous';
-  script.async = true;
+  if (!feeds || feeds.length === 0) {
+    if (empty) empty.hidden = false;
+    return;
+  }
 
-  container.appendChild(script);
+  if (empty) empty.hidden = true;
+
+  list.innerHTML = feeds.map(function(f) {
+    return '<a class="supertopic-item" href="' + escapeHTML(f.url) + '" target="_blank" rel="noopener">' +
+      '<span class="supertopic-text">' + escapeHTML(f.title || '(无文字)') + '</span>' +
+      '<span class="supertopic-meta">' +
+        (f.author ? '<span class="supertopic-author">@' + escapeHTML(f.author.slice(0, 12)) + '</span>' : '') +
+        '<span class="supertopic-date">' + (f.date || '') + '</span>' +
+      '</span>' +
+      '</a>';
+  }).join('');
+
+  if (feeds[0] && feeds[0].date) {
+    updated.textContent = '更新于 ' + feeds[0].date;
+  }
 }

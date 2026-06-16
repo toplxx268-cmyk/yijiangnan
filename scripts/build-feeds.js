@@ -19,6 +19,22 @@ function parseFeed(filePath, author, platform) {
   }
 }
 
+function parseSuperTopicFeed(filePath) {
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const data = JSON.parse(raw);
+    const items = (data.items || []).slice(0, 15).map(item => ({
+      title: (item.title || '').replace(/<[^>]*>/g, '').slice(0, 80),
+      url: item.link || item.url || '',
+      date: (item.pubDate || item.created || item.date || '').slice(0, 10),
+      author: item.author || ''
+    }));
+    return items;
+  } catch (e) {
+    return [];
+  }
+}
+
 const feeds = [
   ...parseFeed('/tmp/nannan-weibo.json', '南南', '微博'),
   ...parseFeed('/tmp/xiaojiang-weibo.json', '小江', '微博'),
@@ -33,10 +49,15 @@ const all = feeds
   .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 10);
 
+// 超话最新帖子
+const supertopicFeeds = parseSuperTopicFeed('/tmp/supertopic.json');
+
 const output = `// 自动生成，请勿手动编辑
 // 每6小时由 GitHub Actions 更新
 window.LATEST_FEEDS = ${JSON.stringify(all, null, 2)};
+
+window.LATEST_SUPERTOPIC_FEEDS = ${JSON.stringify(supertopicFeeds, null, 2)};
 `;
 
 fs.writeFileSync(path.join(__dirname, '..', 'js', 'feeds.js'), output);
-console.log(`Generated feeds.js with ${all.length} items`);
+console.log(`Generated feeds.js with ${all.length} personal items + ${supertopicFeeds.length} supertopic items`);

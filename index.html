@@ -65,7 +65,7 @@
       </div>
 
       <div class="gallery-panel">
-        <h3 class="gallery-title">🖼️ 美图合集</h3>
+        <h3 class="gallery-title">🐈🐕‍🦺合照</h3>
 
         <!-- 图片网格 -->
         <div class="gallery-grid" id="galleryGrid"></div>
@@ -81,16 +81,16 @@
       <!-- 时间线条目由 JS 渲染 -->
     </main>
 
-    <!-- 右侧：留言区 -->
-    <aside class="sidebar sidebar-right" id="guestbookSidebar">
-      <div class="guestbook">
-        <h3 class="guestbook-title">💌 留言板</h3>
-        <p class="guestbook-desc">用 GitHub 账号登录即可留言，所有人可见 ✨</p>
-        <!-- utterances — GitHub Issues 驱动，免费共享 -->
-        <div id="utterances-comments"></div>
-        <div class="guestbook-footer">
-          <p class="guestbook-hint">用 GitHub 账号登录即可留言</p>
+    <!-- 右侧：超话最新 -->
+    <aside class="sidebar sidebar-right" id="superTopicSidebar">
+      <div class="supertopic-panel" id="superTopicPanel">
+        <h3 class="supertopic-title">💬 超话最新</h3>
+        <p class="supertopic-subtitle">忆江南cp超话</p>
+        <div class="supertopic-list" id="superTopicList">
+          <!-- JS 渲染 -->
         </div>
+        <p class="supertopic-empty" id="superTopicEmpty" hidden>暂无超话数据，等待 GitHub Action 抓取后更新 ✨</p>
+        <p class="supertopic-updated" id="superTopicUpdated"></p>
       </div>
     </aside>
 

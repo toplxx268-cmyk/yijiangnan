@@ -34,6 +34,9 @@ jobs:
       - name: 抓取小江小红书
         run: curl -s -m 30 "http://localhost:1200/xiaohongshu/user/594d505250c4b46b76bcacf6/notes?format=json" > /tmp/xiaojiang-xhs.json 2>&1 || echo '{"items":[]}' > /tmp/xiaojiang-xhs.json
 
+      - name: 抓取忆江南cp超话
+        run: curl -s -m 30 "http://localhost:1200/weibo/super_index/1008087f9f4377e6f95c313d4c2019adb1c82f?format=json" > /tmp/supertopic.json 2>&1 || echo '{"items":[]}' > /tmp/supertopic.json
+
       - name: 停止 RSSHub
         run: docker stop rsshub
 
