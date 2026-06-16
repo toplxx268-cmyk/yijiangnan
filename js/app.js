@@ -224,9 +224,8 @@ function renderFootprintMap() {
     attributionControl: false
   });
 
-  // GeoQ 智图瓦片 — WGS-84 坐标系，国内CDN，无需API key
-  L.tileLayer('https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 16
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18
   }).addTo(map);
 
   footprints.forEach(function(p) {
