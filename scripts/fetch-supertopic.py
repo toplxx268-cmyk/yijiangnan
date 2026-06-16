@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""抓取微博超话最新帖子 — cloudscraper 绕过反爬 + 多端点回退"""
-import json, sys, time, random, re
+"""抓取微博超话最新帖子 — HTML页面解析 + cloudscraper + 多方案回退"""
+import json, sys, time, random, re, html as html_mod
 
 try:
     import cloudscraper
@@ -18,139 +18,196 @@ MOBILE_UA = (
     "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1"
 )
 
+# ─── 方案A：解析 HTML 页面中的 embedded JSON ───
 
-def make_scraper():
-    """创建 cloudscraper 实例，模拟真实浏览器 TLS 指纹"""
-    try:
-        return cloudscraper.create_scraper(
-            browser={"browser": "chrome", "platform": "ios", "mobile": True}
-        )
-    except TypeError:
-        return cloudscraper.create_scraper()
-
-
-def extract_posts(data):
-    """从 m.weibo.cn API / 新版 API 响应中提取帖子"""
+def parse_html_embedded(html_text):
+    """从 m.weibo.cn 页面提取内嵌的 feed 数据"""
     posts = []
-    if not data:
-        return posts
 
-    # 格式1: m.weibo.cn 标准响应 {"ok":1, "data":{"cards":[...]}}
-    if data.get("ok") == 1:
-        cards = data.get("data", {}).get("cards", [])
-        for card in cards:
-            mblog = None
-            if card.get("card_type") == 9:
-                mblog = card.get("mblog", {})
-            # 嵌套在 card_group 中
-            if not mblog:
-                for g in card.get("card_group", []):
-                    if g.get("card_type") == 9:
-                        mblog = g.get("mblog", {})
-                        break
-            if not mblog:
+    # 尝试1: window.__INITIAL_STATE__ 或 window.$render_data
+    for pattern in [
+        r'window\.\$render_data\s*=\s*(\[[^\]]*\{.*?\}\s*\])\s*\[0\]',
+        r'window\.\$render_data\s*=\s*(\[.*?\])\s*\[0\]\s*;',
+        r'"statuses"\s*:\s*(\[.*?\])',
+        r'var\s+renderData\s*=\s*(\[.*?\])',
+        r'window\.__INITIAL_STATE__\s*=\s*(\{.*?\});',
+    ]:
+        m = re.search(pattern, html_text, re.DOTALL)
+        if m:
+            try:
+                data = json.loads(m.group(1))
+                if isinstance(data, list) and len(data) > 0:
+                    data = data[0]
+                if isinstance(data, dict):
+                    cards = data.get("statuses") or data.get("cards") or []
+                    for card in (cards if isinstance(cards, list) else []):
+                        mblog = card.get("mblog") or card
+                        text = re.sub(r"<[^>]*>", "", mblog.get("text", ""))
+                        text = re.sub(r"\s+", " ", text).strip()
+                        user = mblog.get("user", {})
+                        posts.append({
+                            "title": text[:80],
+                            "url": f"https://m.weibo.cn/detail/{mblog['id']}" if mblog.get("id") else "",
+                            "date": (mblog.get("created_at") or "")[:10],
+                            "author": user.get("screen_name", ""),
+                        })
+                        if len(posts) >= MAX_POSTS:
+                            break
+                    if posts:
+                        print(f"  从 HTML embedded 提取到 {len(posts)} 条", file=sys.stderr)
+                        return posts
+            except (json.JSONDecodeError, KeyError, TypeError):
                 continue
 
-            text = mblog.get("text", "")
-            text = re.sub(r"<[^>]*>", "", text)
-            text = re.sub(r"\s+", " ", text).strip()
-            user = mblog.get("user", {})
-
-            posts.append({
-                "title": text[:80],
-                "url": f"https://m.weibo.cn/detail/{mblog['id']}" if mblog.get("id") else "",
-                "date": (mblog.get("created_at") or "")[:10],
-                "author": user.get("screen_name", ""),
-            })
-
-    # 格式2: 新版 weibo.com 响应
-    elif data.get("data") and isinstance(data["data"], list):
-        for card in data["data"]:
-            text = re.sub(r"<[^>]*>", "", card.get("text", ""))[:80]
-            user = card.get("user", {})
-            posts.append({
-                "title": text[:80],
-                "url": f"https://m.weibo.cn/detail/{card['id']}" if card.get("id") else "",
-                "date": (card.get("created_at") or "")[:10],
-                "author": user.get("screen_name", ""),
-            })
+    # 尝试2: 从 <script> 标签中提取包含 mblog 的 JSON
+    for script_match in re.finditer(r'<script[^>]*>([^<]+)</script>', html_text):
+        script = script_match.group(1)
+        if 'mblog' in script or 'statuses' in script:
+            for m in re.finditer(r'\{[^}]*"mblog"[^}]*\}', script):
+                try:
+                    obj = json.loads(m.group(0))
+                    mblog = obj.get("mblog", obj)
+                    text = re.sub(r"<[^>]*>", "", mblog.get("text", ""))[:80]
+                    user = mblog.get("user", {})
+                    posts.append({
+                        "title": text[:80],
+                        "url": f"https://m.weibo.cn/detail/{mblog['id']}" if mblog.get("id") else "",
+                        "date": (mblog.get("created_at") or "")[:10],
+                        "author": user.get("screen_name", ""),
+                    })
+                    if len(posts) >= MAX_POSTS:
+                        break
+                except (json.JSONDecodeError, KeyError):
+                    continue
+        if posts:
+            break
 
     return posts[:MAX_POSTS]
 
 
-def try_fetch(url, scraper, headers, label=""):
-    """请求并返回 JSON"""
-    for attempt in range(3):
-        try:
-            resp = scraper.get(url, headers=headers, timeout=30)
-            if resp.status_code == 200:
-                return resp.json()
-            print(f"  [{label}] HTTP {resp.status_code}, retry {attempt+1}/3", file=sys.stderr)
-        except Exception as e:
-            print(f"  [{label}] {e}, retry {attempt+1}/3", file=sys.stderr)
-        if attempt < 2:
-            time.sleep(2 ** attempt + random.uniform(0, 1))
-    return None
+# ─── 方案B：API 请求 ───
 
+def try_api(scraper, headers):
+    """尝试 m.weibo.cn API 端点"""
+    endpoints = [
+        f"https://m.weibo.cn/api/container/getIndex?containerid={SUPERTOPIC_ID}&page=1",
+        f"https://m.weibo.cn/api/container/getIndex?containerid={SUPERTOPIC_ID}_-_feed&page=1",
+    ]
+
+    for url in endpoints:
+        for attempt in range(3):
+            try:
+                resp = scraper.get(url, headers=headers, timeout=30)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    if data.get("ok") == 1:
+                        return extract_api_posts(data)
+            except Exception:
+                pass
+            if attempt < 2:
+                time.sleep(2**attempt + random.uniform(0, 1))
+    return []
+
+
+def extract_api_posts(data):
+    """从 API 响应提取帖子"""
+    posts = []
+    cards = data.get("data", {}).get("cards", [])
+    for card in cards:
+        mblog = None
+        if card.get("card_type") == 9:
+            mblog = card.get("mblog", {})
+        if not mblog:
+            for g in card.get("card_group", []):
+                if g.get("card_type") == 9:
+                    mblog = g.get("mblog", {})
+                    break
+        if not mblog:
+            continue
+        text = re.sub(r"<[^>]*>", "", mblog.get("text", ""))
+        text = re.sub(r"\s+", " ", text).strip()
+        user = mblog.get("user", {})
+        posts.append({
+            "title": text[:80],
+            "url": f"https://m.weibo.cn/detail/{mblog['id']}" if mblog.get("id") else "",
+            "date": (mblog.get("created_at") or "")[:10],
+            "author": user.get("screen_name", ""),
+        })
+        if len(posts) >= MAX_POSTS:
+            break
+    return posts
+
+
+# ─── 主流程 ───
 
 def main():
-    scraper = make_scraper()
+    scraper = cloudscraper.create_scraper()
 
     headers = {
         "User-Agent": MOBILE_UA,
-        "Accept": "application/json, text/plain, */*",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "X-Requested-With": "XMLHttpRequest",
-        "Referer": f"https://m.weibo.cn/p/{SUPERTOPIC_ID}",
+        "Referer": "https://m.weibo.cn/",
     }
 
-    # Step 1: 预热 cookie（访问超话主页）
-    print("Step 1: 预热 cookie...", file=sys.stderr)
+    # 方案A：爬 HTML 页面，解析 embedded JSON
+    print("方案A: 请求超话 HTML 页面...", file=sys.stderr)
+    page_url = f"https://m.weibo.cn/p/{SUPERTOPIC_ID}"
     try:
-        scraper.get(
-            f"https://m.weibo.cn/p/{SUPERTOPIC_ID}",
-            headers={**headers, "Accept": "text/html,*/*"},
-            timeout=30,
-        )
-        time.sleep(random.uniform(0.8, 1.5))
+        resp = scraper.get(page_url, headers=headers, timeout=45)
+        if resp.status_code == 200:
+            posts = parse_html_embedded(resp.text)
+            if posts:
+                return save_posts(posts)
+            print("  未从 HTML 提取到数据，尝试 API...", file=sys.stderr)
+        else:
+            print(f"  HTML 页面返回 HTTP {resp.status_code}", file=sys.stderr)
     except Exception as e:
-        print(f"  预热跳过: {e}", file=sys.stderr)
+        print(f"  方案A异常: {e}", file=sys.stderr)
 
-    # Step 2: 依次尝试多个 API 端点
-    endpoints = [
-        (
-            "m.weibo.cn API",
-            f"https://m.weibo.cn/api/container/getIndex?containerid={SUPERTOPIC_ID}&page=1",
-        ),
-        (
-            "m.weibo.cn 备用",
-            f"https://m.weibo.cn/api/container/getIndex?containerid={SUPERTOPIC_ID}_-_feed&page=1",
-        ),
-        (
-            "weibo.com 新版API",
-            f"https://weibo.com/ajax/statuses/searchProfile?containerid={SUPERTOPIC_ID}&page=1",
-        ),
-    ]
+    # 方案B：API 请求
+    print("方案B: 请求 API...", file=sys.stderr)
+    headers["Accept"] = "application/json, text/plain, */*"
+    headers["X-Requested-With"] = "XMLHttpRequest"
+    posts = try_api(scraper, headers)
 
-    data = None
-    for label, url in endpoints:
-        print(f"Step 2: 尝试 {label}...", file=sys.stderr)
-        data = try_fetch(url, scraper, headers, label)
-        if data:
-            print(f"  ✓ {label} 成功", file=sys.stderr)
-            break
+    if not posts:
+        # 方案C：尝试 weibo.cn（老版移动站）
+        print("方案C: 尝试 weibo.cn 老版移动站...", file=sys.stderr)
+        try:
+            resp = scraper.get(
+                f"https://weibo.cn/search/super?keyword=忆江南cp",
+                headers=headers,
+                timeout=30,
+            )
+            if resp.status_code == 200:
+                # 解析 weibo.cn 的简单 HTML
+                for m in re.finditer(
+                    r'<span class="ctt">(.*?)</span>.*?<span class="ct">.*?(\d+月\d+日).*?</span>',
+                    resp.text, re.DOTALL
+                ):
+                    text = re.sub(r"<[^>]*>", "", m.group(1)).strip()[:80]
+                    date_str = m.group(2) if m.lastindex >= 2 else ""
+                    posts.append({
+                        "title": text[:80],
+                        "url": "",
+                        "date": date_str,
+                        "author": "",
+                    })
+                    if len(posts) >= MAX_POSTS:
+                        break
+                if posts:
+                    print(f"  从 weibo.cn 提取到 {len(posts)} 条", file=sys.stderr)
+        except Exception as e:
+            print(f"  方案C异常: {e}", file=sys.stderr)
 
-    if not data:
-        print("所有端点均失败，输出空结果", file=sys.stderr)
-        with open(OUTPUT, "w") as f:
-            json.dump({"ok": 0}, f)
-        sys.exit(0)
+    return save_posts(posts)
 
-    posts = extract_posts(data)
-    print(f"Step 3: 提取到 {len(posts)} 条帖子", file=sys.stderr)
 
-    # 输出为 build-feeds.js 兼容格式
+def save_posts(posts):
+    """保存结果"""
     result = {"ok": 1, "data": {"cards": []}}
+
     for p in posts:
         result["data"]["cards"].append({
             "card_type": 9,
@@ -165,10 +222,15 @@ def main():
     for i, p in enumerate(posts):
         print(f"  [{i+1}] {p['date']} @{p['author']}: {p['title'][:40]}...", file=sys.stderr)
 
+    if not posts:
+        print("所有方案均失败，返回空", file=sys.stderr)
+        result["ok"] = 0
+
     with open(OUTPUT, "w") as f:
         json.dump(result, f, ensure_ascii=False)
 
-    print(f"Done → {OUTPUT}", file=sys.stderr)
+    print(f"Done → {OUTPUT} ({len(posts)} 条)", file=sys.stderr)
+    return posts
 
 
 if __name__ == "__main__":
