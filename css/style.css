@@ -773,101 +773,75 @@ body {
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 18px;
+  padding: 16px;
 }
 
 .links-title {
   font-family: var(--font-display);
   font-size: 1.1rem;
   color: var(--text);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   padding-bottom: 10px;
   border-bottom: 2px solid var(--pink);
   text-align: center;
 }
 
-.link-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
+/* ——— 平台卡片 ——— */
+.platform-card {
+  background: var(--bg);
   border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.weibo-card {
+  border-left: 3px solid #FF8200;
+}
+
+.platform-header {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.platform-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.plink-item {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  background: #fff;
+  border-radius: 14px;
   text-decoration: none;
   transition: var(--transition);
-  margin-bottom: 6px;
 }
 
-.link-card:hover {
-  transform: translateX(3px);
-}
-
-.link-supertopic {
-  background: linear-gradient(135deg, #FFF0F3, #FFE4E8);
-  border: 1.5px solid var(--pink);
-}
-
-.link-supertopic:hover {
-  background: linear-gradient(135deg, #FFE4E8, #FFD4DC);
-}
-
-.link-nannan {
-  background: #FFF5F7;
-}
-
-.link-nannan:hover {
-  background: #FFE8EC;
-}
-
-.link-xiaojiang {
-  background: #FFF8F5;
-}
-
-.link-xiaojiang:hover {
-  background: #FFEDE4;
-}
-
-.link-small {
-  background: var(--bg);
-  padding: 10px 14px;
-}
-
-.link-small:hover {
-  background: #F5EDED;
-}
-
-.link-icon {
-  font-size: 1.4rem;
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255,255,255,0.7);
-  border-radius: 50%;
-}
-
-.link-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.link-label {
-  font-size: 0.9rem;
-  font-weight: 600;
+.plink-item:hover {
+  background: var(--pink);
   color: var(--text);
 }
 
-.link-desc {
-  font-size: 0.75rem;
-  color: var(--text-lighter);
+/* ——— 双栏平台行 ——— */
+.platform-row {
+  display: flex;
+  gap: 8px;
 }
 
-.links-divider {
-  height: 1px;
-  background: rgba(200,160,160,0.15);
-  margin: 10px 0;
+.platform-card.half {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.platform-card.half .plink-item {
+  font-size: 0.76rem;
+  padding: 4px 8px;
 }
 
 /* ——— No Results ——— */
