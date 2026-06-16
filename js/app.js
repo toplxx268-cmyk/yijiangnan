@@ -48,8 +48,14 @@
   renderGallery();
   renderBigDays();
   renderFeeds();
-  renderFootprintMap();
   initBackToTop();
+
+  // 地图等页面布局稳定后再初始化
+  if (document.readyState === 'complete') {
+    setTimeout(renderFootprintMap, 300);
+  } else {
+    window.addEventListener('load', function() { setTimeout(renderFootprintMap, 300); });
+  }
 
   console.log(`💕 CP Archive ready — ${data.moments.length} moments loaded.`);
 })();
