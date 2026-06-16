@@ -48,14 +48,8 @@
   renderGallery();
   renderBigDays();
   renderFeeds();
+  renderFootprintMap();
   initBackToTop();
-
-  // 地图等页面布局稳定后再初始化
-  if (document.readyState === 'complete') {
-    setTimeout(renderFootprintMap, 300);
-  } else {
-    window.addEventListener('load', function() { setTimeout(renderFootprintMap, 300); });
-  }
 
   console.log(`💕 CP Archive ready — ${data.moments.length} moments loaded.`);
 })();
@@ -194,15 +188,11 @@ function formatBigDay(date) {
 }
 
 // ============================================================
-// Footprint Map — 足迹地图（GeoQ 瓦片，国内加载快）
+// Footprint Map — 内嵌迷你地图，零外部依赖
 // ============================================================
 
 function renderFootprintMap() {
   var container = document.getElementById('footprintMap');
-  if (typeof L === 'undefined') {
-    if (container) container.parentElement.style.display = 'none';
-    return;
-  }
   var footprints = window.CP_DATA.footprints || [];
   if (!container || footprints.length === 0) return;
 
@@ -217,37 +207,25 @@ function renderFootprintMap() {
     titleEl.textContent = '👣 ' + Object.keys(cities).length + '城·' + Object.keys(countries).length + '国';
   }
 
-  var map = L.map(container, {
-    center: [30, 110],
-    zoom: 5,
-    zoomControl: false,
-    attributionControl: false
-  });
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18
-  }).addTo(map);
-
-  footprints.forEach(function(p) {
-    var icon = L.divIcon({
-      className: 'footprint-marker',
-      html: '<div class="fp-emoji">' + p.emoji + '</div><div class="fp-label">' + p.name + '</div>',
-      iconSize: [60, 44],
-      iconAnchor: [30, 44]
-    });
-    L.marker([p.lat, p.lng], { icon: icon }).addTo(map)
-      .bindPopup('<div class="fp-popup"><strong>' + p.emoji + ' ' + escapeHTML(p.name) + '</strong><br><small>' + (p.date || '') + '</small></div>');
-  });
-
-  if (footprints.length > 1) {
-    map.fitBounds(footprints.map(function(p) { return [p.lat, p.lng]; }), { padding: [20, 20], maxZoom: 7 });
+  // 经纬度 → 百分比 (equirectangular)
+  function pos(lat, lng) {
+    return {
+      left: ((lng + 180) / 360 * 100).toFixed(2) + '%',
+      top: ((90 - lat) / 180 * 100).toFixed(2) + '%'
+    };
   }
 
-  var fixMap = function() { map.invalidateSize(); };
-  setTimeout(fixMap, 200);
-  setTimeout(fixMap, 600);
-  window.addEventListener('resize', fixMap);
-  if (window.ResizeObserver) new ResizeObserver(fixMap).observe(container);
+  var html = '';
+  footprints.forEach(function(p) {
+    var xy = pos(p.lat, p.lng);
+    var tooltip = p.emoji + ' ' + escapeHTML(p.name) + (p.date ? ' · ' + p.date : '');
+    html += '<span class="mm-marker" style="left:' + xy.left + ';top:' + xy.top + ';" title="' + tooltip + '">' +
+      '<span class="mm-emoji">' + p.emoji + '</span>' +
+      '<span class="mm-label">' + escapeHTML(p.name) + '</span>' +
+      '</span>';
+  });
+
+  container.insertAdjacentHTML('beforeend', html);
 }
 
 // ============================================================

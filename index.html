@@ -9,8 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💕</text></svg>">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 </head>
 <body>
   <!-- Header -->
@@ -80,7 +78,11 @@
       <!-- 足迹地图 -->
       <div class="gallery-panel map-panel">
         <h3 class="gallery-title" id="footprintTitle">👣</h3>
-        <div class="map-container" id="footprintMap"></div>
+        <div class="mini-map" id="footprintMap">
+          <!-- 经纬线背景 -->
+          <div class="mm-grid"></div>
+          <!-- 标记由JS渲染 -->
+        </div>
       </div>
     </aside>
 

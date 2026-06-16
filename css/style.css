@@ -593,49 +593,61 @@ body {
   font-size: 0.72rem;
 }
 
-/* ——— Footprint Map ——— */
+/* ——— Footprint Mini Map ——— */
 .map-panel {
   margin-top: 16px;
 }
 
-.map-container {
+.mini-map {
+  position: relative;
   height: 240px;
+  background: linear-gradient(180deg, #e8f4f8 0%, #d4e8f0 30%, #e8f0e8 60%, #f0ead8 100%);
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
-.footprint-marker {
-  background: none !important;
-  border: none !important;
+/* 经纬线网格 */
+.mm-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px);
+  background-size: 10% 10%;
+}
+
+/* 地点标记 */
+.mm-marker {
+  position: absolute;
+  transform: translate(-50%, -100%);
   text-align: center;
+  cursor: default;
+  z-index: 2;
 }
 
-.fp-emoji {
-  font-size: 1.3rem;
+.mm-emoji {
+  display: block;
+  font-size: 1.1rem;
   line-height: 1;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+  transition: transform 0.2s;
 }
 
-.fp-label {
-  font-size: 0.6rem;
-  background: #fff;
+.mm-marker:hover .mm-emoji {
+  transform: scale(1.3);
+}
+
+.mm-label {
+  display: block;
+  font-size: 0.58rem;
+  background: rgba(255,255,255,0.9);
   color: var(--text);
   padding: 1px 5px;
-  border-radius: 8px;
+  border-radius: 6px;
   white-space: nowrap;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  display: inline-block;
   margin-top: 1px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
-
-.fp-popup {
-  text-align: center;
-  font-size: 0.85rem;
-}
-
-.fp-popup strong { color: var(--text); }
-
-.fp-popup small { color: var(--text-lighter); }
 
 /* ——— Center: Timeline ——— */
 .timeline {
