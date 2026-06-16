@@ -23,12 +23,21 @@ function parseSuperTopicFeed(filePath) {
   try {
     const raw = fs.readFileSync(filePath, 'utf8');
     const data = JSON.parse(raw);
-    const items = (data.items || []).slice(0, 15).map(item => ({
-      title: (item.title || '').replace(/<[^>]*>/g, '').slice(0, 80),
-      url: item.link || item.url || '',
-      date: (item.pubDate || item.created || item.date || '').slice(0, 10),
-      author: item.author || ''
-    }));
+    if (!data.ok || !data.data || !data.data.cards) return [];
+
+    const items = [];
+    for (const card of data.data.cards) {
+      if (card.card_type === 9 && card.mblog) {
+        const m = card.mblog;
+        items.push({
+          title: (m.text || '').replace(/<[^>]*>/g, '').slice(0, 80),
+          url: m.id ? `https://m.weibo.cn/detail/${m.id}` : (m.scheme || ''),
+          date: (m.created_at || '').slice(0, 10),
+          author: (m.user && m.user.screen_name) ? m.user.screen_name : ''
+        });
+      }
+      if (items.length >= 5) break; // 只要最新5条
+    }
     return items;
   } catch (e) {
     return [];

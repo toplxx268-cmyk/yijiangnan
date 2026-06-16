@@ -34,11 +34,17 @@ jobs:
       - name: 抓取小江小红书
         run: curl -s -m 30 "http://localhost:1200/xiaohongshu/user/594d505250c4b46b76bcacf6/notes?format=json" > /tmp/xiaojiang-xhs.json 2>&1 || echo '{"items":[]}' > /tmp/xiaojiang-xhs.json
 
-      - name: 抓取忆江南cp超话
-        run: curl -s -m 30 "http://localhost:1200/weibo/super_index/1008087f9f4377e6f95c313d4c2019adb1c82f?format=json" > /tmp/supertopic.json 2>&1 || echo '{"items":[]}' > /tmp/supertopic.json
-
       - name: 停止 RSSHub
         run: docker stop rsshub
+
+      - name: 抓取忆江南cp超话 (m.weibo.cn API)
+        run: |
+          curl -s -m 30 \
+            -H "User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148" \
+            -H "Accept: application/json" \
+            -H "X-Requested-With: XMLHttpRequest" \
+            "https://m.weibo.cn/api/container/getIndex?containerid=1008087f9f4377e6f95c313d4c2019adb1c82f&page=1" \
+            > /tmp/supertopic.json 2>&1 || echo '{"ok":0}' > /tmp/supertopic.json
 
       - name: 生成 feeds.js
         run: node scripts/build-feeds.js
