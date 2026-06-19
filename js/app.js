@@ -104,7 +104,7 @@ function renderFeeds() {
 
   list.innerHTML = feeds.map(function(f) {
     var platformEmoji = { '微博': '🔵', '抖音': '🎵', '小红书': '📕' }[f.platform] || '🔗';
-    var authorEmoji = f.author === '南南' ? '🌸' : '🌟';
+    var authorEmoji = f.author === '南南' ? '🌹' : '🌟';
     return '<a class="feed-item" href="' + f.url + '" target="_blank" rel="noopener">' +
       '<span class="feed-emoji">' + authorEmoji + '</span>' +
       '<span class="feed-text">' + escapeHTML(f.title || '(无文字)') + '</span>' +
@@ -162,7 +162,7 @@ function renderBigDays() {
       birthdays.push({
         label: '南南生日',
         date: getNextBirthday(b.nannan, today),
-        emoji: '🌸',
+        emoji: '🌹',
         type: 'birthday'
       });
     }

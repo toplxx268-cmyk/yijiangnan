@@ -20,7 +20,7 @@ window.CP_DATA = {
   // 经纬度去 https://www.openstreetmap.org 搜索获取
   footprints: [
     { name: "海南", city: "三亚", country: "中国", lat: 18.2528, lng: 109.5120, date: "24年4月", emoji: "🌴" },
-    { name: "杭州", city: "杭州", country: "中国", lat: 30.2741, lng: 120.1551, date: "24年6月", emoji: "🌸" },
+    { name: "杭州", city: "杭州", country: "中国", lat: 30.2741, lng: 120.1551, date: "24年6月", emoji: "🌹" },
     { name: "成都", city: "成都", country: "中国", lat: 30.5728, lng: 104.0668, date: "24年7月", emoji: "🐼" },
     { name: "北京", city: "北京", country: "中国", lat: 39.9042, lng: 116.4074, date: "24年7月", emoji: "🏯" },
     { name: "上海", city: "上海", country: "中国", lat: 31.2304, lng: 121.4737, date: "24年7月", emoji: "🌃" },
@@ -1208,7 +1208,7 @@ window.CP_DATA = {
       name: "小忆江南",
       date: "2025-06-15",
       message: "每天都要来看看江南的🍬！太甜了～ 💕",
-      avatar: "🌸"
+      avatar: "🌹"
     },
     {
       name: "甜度满分",
