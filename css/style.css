@@ -350,11 +350,9 @@ body {
 
 .tag-count { opacity: 0.7; font-size: 0.76rem; margin-left: 2px; }
 
-/* ——— Timeline sort toggle ——— */
+/* ——— Timeline sort toggle (与年份标签同高度) ——— */
 .tl-sort-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+  display: inline-block;
   padding: 5px 18px;
   border: none;
   border-radius: 20px;
@@ -362,6 +360,7 @@ body {
   color: var(--text);
   font-size: 0.95rem;
   font-family: var(--font-display);
+  line-height: inherit;
   cursor: pointer;
   transition: var(--transition);
   white-space: nowrap;
@@ -369,12 +368,10 @@ body {
   margin-top: 0;
 }
 
-.tl-sort-toggle:hover { background: var(--pink); color: var(--text); }
+.tl-sort-toggle:hover { background: var(--pink-dark); color: var(--text); }
 
-.tl-sort-toggle.desc { background: var(--coral); border-color: var(--coral); color: #fff; }
-
-.sort-icon { font-size: 1rem; line-height: 1; }
-.sort-label { font-size: 0.8rem; }
+.tl-sort-toggle.desc { background: var(--coral); color: #fff; }
+.tl-sort-toggle.desc:hover { background: var(--coral-dark); color: #fff; }
 
 /* ============================================================
    Three-Column Main Layout

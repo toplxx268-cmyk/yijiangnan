@@ -25,8 +25,7 @@ function renderTimeline() {
   var sortCls = SORT_DESC ? ' desc' : '';
   var sortHTML = '' +
     '<div class="tl-sort-toggle' + sortCls + '" id="sortToggle" title="切换排序">' +
-    '  <span class="sort-icon">' + sortIcon + '</span>' +
-    '  <span class="sort-label">排序</span>' +
+      sortIcon + ' 排序' +
     '</div>';
 
   const moments = [...window.CP_DATA.moments];
