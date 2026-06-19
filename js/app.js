@@ -272,7 +272,7 @@ function renderFootprintMap() {
     titleEl.textContent = '👣 ' + Object.keys(cities).length + '城·' + Object.keys(countries).length + '国';
   }
 
-  // 初始化高德地图（GCJ-02 坐标系，国内流畅）
+  // 初始化高德地图（默认聚焦中国区域）
   var map = new AMap.Map(container, {
     zoom: 5,
     center: [110, 28],
@@ -280,6 +280,7 @@ function renderFootprintMap() {
   });
 
   // 遍历足迹，WGS-84 → GCJ-02 转换后添加标记
+  var chinaMarkers = [];
   footprints.forEach(function(p) {
     var gcj = wgs84ToGcj02(p.lng, p.lat);
 
@@ -308,10 +309,13 @@ function renderFootprintMap() {
     })(p, gcj));
 
     map.add(marker);
+    if (p.country === '中国') chinaMarkers.push(marker);
   });
 
-  // 自适应所有标记
-  map.setFitView(null, false, [60, 60, 60, 60]);
+  // 默认聚焦到中国区域
+  if (chinaMarkers.length > 0) {
+    map.setFitView(chinaMarkers, false, [60, 60, 60, 60]);
+  }
 }
 
 // ============================================================
