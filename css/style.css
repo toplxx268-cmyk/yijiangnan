@@ -365,7 +365,7 @@ body {
   position: relative;
   z-index: 1;
   float: right;
-  margin-top: -3px;
+  margin-top: 28px;
 }
 
 .tl-sort-toggle:hover { background: var(--pink-dark); color: var(--text); }
