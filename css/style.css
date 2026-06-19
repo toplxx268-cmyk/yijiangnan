@@ -99,7 +99,8 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-shadow: none;
-  margin-bottom: 16px;
+  margin-bottom: 0;
+  margin-top: 24px;
   letter-spacing: 1px;
 }
 
