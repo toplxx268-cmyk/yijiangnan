@@ -143,7 +143,7 @@ function renderBigDays() {
 
   // 计算周年（基于 startDate）
   const anniversaries = [];
-  for (let y = 1; y <= 2; y++) {
+  for (let y = 2; y <= 3; y++) {
     const annDate = new Date(startDate);
     annDate.setFullYear(startDate.getFullYear() + y);
     anniversaries.push({

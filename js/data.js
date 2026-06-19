@@ -7,7 +7,7 @@
 window.CP_DATA = {
   meta: {
     coupleName: "忆江南cp 💕",
-    subtitle: "@一枝南南&江星熠 爱的足迹👣",
+    subtitle: "@一枝南南&江星熠 爱会让我们变得完整",
     startDate: "2024-04-09",
     headerImage: "img/gallery/IMG_2838.JPG",
     birthdays: {
