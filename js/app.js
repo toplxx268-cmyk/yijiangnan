@@ -1,4 +1,24 @@
 // ============================================================
+// 🔑 高德地图 Key — 把 YOUR_AMAP_KEY 换成你申请的 Key
+//    申请地址: https://console.amap.com/dev/key/app
+//    选择「Web端(JS API)」
+// ============================================================
+var AMAP_KEY = '4bb326d989ffdd2851d44342fc6e6406';
+
+// 动态加载高德地图 JS API
+(function loadAmap() {
+  if (!AMAP_KEY || AMAP_KEY === 'YOUR_AMAP_KEY') {
+    console.warn('🗺️ 请先在 app.js 顶部填入高德地图 Key');
+    return;
+  }
+  var s = document.createElement('script');
+  s.src = 'https://webapi.amap.com/maps?v=2.0&key=' + AMAP_KEY;
+  s.onload = function () { renderFootprintMap(); };
+  s.onerror = function () { console.warn('🗺️ 高德地图加载失败，请检查 Key 是否正确'); };
+  document.head.appendChild(s);
+})();
+
+// ============================================================
 // App — 核心应用逻辑
 // ============================================================
 
@@ -48,7 +68,7 @@
   renderGallery();
   renderBigDays();
   renderFeeds();
-  renderFootprintMap();
+  // 足迹地图由高德 JS 加载完成后自动调用 renderFootprintMap()
   initBackToTop();
 
   console.log(`💕 CP Archive ready — ${data.moments.length} moments loaded.`);
@@ -188,15 +208,52 @@ function formatBigDay(date) {
 }
 
 // ============================================================
-// Footprint Map — 足迹地图
+// WGS-84 → GCJ-02 坐标转换（高德地图使用 GCJ-02 坐标系）
+// ============================================================
+
+function wgs84ToGcj02(lng, lat) {
+  var a = 6378245.0;
+  var ee = 0.00669342162296594323;
+
+  function transformLat(x, y) {
+    var ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));
+    ret += (20.0 * Math.sin(6.0 * x * Math.PI) + 20.0 * Math.sin(2.0 * x * Math.PI)) * 2.0 / 3.0;
+    ret += (20.0 * Math.sin(y * Math.PI) + 40.0 * Math.sin(y / 3.0 * Math.PI)) * 2.0 / 3.0;
+    ret += (160.0 * Math.sin(y / 12.0 * Math.PI) + 320.0 * Math.sin(y * Math.PI / 30.0)) * 2.0 / 3.0;
+    return ret;
+  }
+
+  function transformLng(x, y) {
+    var ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));
+    ret += (20.0 * Math.sin(6.0 * x * Math.PI) + 20.0 * Math.sin(2.0 * x * Math.PI)) * 2.0 / 3.0;
+    ret += (20.0 * Math.sin(x * Math.PI) + 40.0 * Math.sin(x / 3.0 * Math.PI)) * 2.0 / 3.0;
+    ret += (150.0 * Math.sin(x / 12.0 * Math.PI) + 300.0 * Math.sin(x / 30.0 * Math.PI)) * 2.0 / 3.0;
+    return ret;
+  }
+
+  var dlat = transformLat(lng - 105.0, lat - 35.0);
+  var dlng = transformLng(lng - 105.0, lat - 35.0);
+  var radlat = lat / 180.0 * Math.PI;
+  var magic = Math.sin(radlat);
+  magic = 1 - ee * magic * magic;
+  var sqrtmagic = Math.sqrt(magic);
+  var dlat2 = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * Math.PI);
+  var dlng2 = (dlng * 180.0) / (a / sqrtmagic * Math.cos(radlat) * Math.PI);
+
+  return { lng: lng + dlng2, lat: lat + dlat2 };
+}
+
+// ============================================================
+// Footprint Map — 足迹地图（高德地图 JS API）
 // ============================================================
 
 function renderFootprintMap() {
   var container = document.getElementById('footprintMap');
-  if (typeof L === 'undefined') return;
+  if (typeof AMap === 'undefined') return;
   var footprints = window.CP_DATA.footprints || [];
   if (!container || footprints.length === 0) return;
 
+  // 统计城市和国家
   var cities = {}, countries = {};
   footprints.forEach(function(p) {
     if (p.country === '中国' && p.city) cities[p.city] = true;
@@ -207,26 +264,46 @@ function renderFootprintMap() {
     titleEl.textContent = '👣 ' + Object.keys(cities).length + '城·' + Object.keys(countries).length + '国';
   }
 
-  var map = L.map(container, { center: [28, 110], zoom: 5, zoomControl: false, attributionControl: false });
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
-
-  footprints.forEach(function(p) {
-    L.marker([p.lat, p.lng], {
-      icon: L.divIcon({
-        className: 'fp-marker',
-        html: '<div class="fp-emoji">' + p.emoji + '</div><div class="fp-label">' + escapeHTML(p.name) + '</div>',
-        iconSize: [56, 42], iconAnchor: [28, 42]
-      })
-    }).addTo(map).bindPopup('<strong>' + p.emoji + ' ' + escapeHTML(p.name) + '</strong><br><small>' + (p.date || '') + '</small>');
+  // 初始化高德地图（GCJ-02 坐标系，国内流畅）
+  var map = new AMap.Map(container, {
+    zoom: 5,
+    center: [110, 28],
+    resizeEnable: true
   });
 
-  map.fitBounds(footprints.map(function(p) { return [p.lat, p.lng]; }), { padding: [15, 15], maxZoom: 7 });
+  // 遍历足迹，WGS-84 → GCJ-02 转换后添加标记
+  footprints.forEach(function(p) {
+    var gcj = wgs84ToGcj02(p.lng, p.lat);
 
-  // 延迟刷新防灰块
-  setTimeout(function() { map.invalidateSize(); }, 300);
-  setTimeout(function() { map.invalidateSize(); }, 800);
-  window.addEventListener('resize', function() { map.invalidateSize(); });
+    var markerContent = '' +
+      '<div class="fp-marker">' +
+      '<div class="fp-emoji">' + p.emoji + '</div>' +
+      '<div class="fp-label">' + escapeHTML(p.name) + '</div>' +
+      '</div>';
+
+    var marker = new AMap.Marker({
+      position: [gcj.lng, gcj.lat],
+      content: markerContent,
+      offset: new AMap.Pixel(-28, -42),
+      zIndex: 100
+    });
+
+    // 点击弹窗
+    marker.on('click', (function(p, gcj) {
+      return function() {
+        var info = new AMap.InfoWindow({
+          content: '<div style="text-align:center;font-size:14px;"><strong>' + p.emoji + ' ' + escapeHTML(p.name) + '</strong><br><small style="color:#8B6B6B;">' + (p.date || '') + '</small></div>',
+          offset: new AMap.Pixel(0, -48)
+        });
+        info.open(map, [gcj.lng, gcj.lat]);
+      };
+    })(p, gcj));
+
+    map.add(marker);
+  });
+
+  // 自适应所有标记
+  map.setFitView(null, false, [60, 60, 60, 60]);
 }
 
 // ============================================================
