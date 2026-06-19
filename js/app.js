@@ -2,21 +2,23 @@
 // 🔑 高德地图 Key & 安全密钥
 //    Key 申请地址: https://console.amap.com/dev/key/app
 //    选择「Web端(JS API)」
-//    安全密钥（jscode）在 Key 详情页可见，2021年底后新建的 Key 必须填写
+//    安全密钥在 Key 详情页 → 「安全密钥」字段
 // ============================================================
 var AMAP_KEY    = 'b6a3c822b472de0ef43ac88346651081';
-var AMAP_JSCODE = '4bb326d989ffdd2851d44342fc6e6406';  // ← 填入安全密钥，如果没有可以不填
+var AMAP_JSCODE = '4bb326d989ffdd2851d44342fc6e6406';
 
-// 动态加载高德地图 JS API
+// 安全密钥必须在地图 JS 加载前设置（1.4.x 要求）
+if (AMAP_JSCODE && AMAP_JSCODE !== 'YOUR_JSCODE') {
+  window._AMapSecurityConfig = { securityJsCode: AMAP_JSCODE };
+}
+
+// 动态加载高德地图 JS API（1.4.15 稳定版）
 (function loadAmap() {
   if (!AMAP_KEY || AMAP_KEY === 'YOUR_AMAP_KEY') {
     console.warn('🗺️ 请先在 app.js 顶部填入高德地图 Key');
     return;
   }
-  var url = 'https://webapi.amap.com/maps?v=2.0&key=' + AMAP_KEY;
-  if (AMAP_JSCODE && AMAP_JSCODE !== 'YOUR_JSCODE') {
-    url += '&jscode=' + AMAP_JSCODE;
-  }
+  var url = 'https://webapi.amap.com/maps?v=1.4.15&key=' + AMAP_KEY;
   var s = document.createElement('script');
   s.src = url;
   s.onload = function () { renderFootprintMap(); };
