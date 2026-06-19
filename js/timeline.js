@@ -20,6 +20,14 @@ function renderTimeline() {
   const container = document.getElementById('timeline');
   if (!container) return;
 
+  // 排序按钮（放在时间线顶部右侧）
+  var sortIcon = SORT_DESC ? '↓' : '↑';
+  var sortCls = SORT_DESC ? ' desc' : '';
+  var sortHTML = '' +
+    '<div class="tl-sort-toggle' + sortCls + '" id="sortToggle" title="切换排序">' +
+      sortIcon + ' 排序' +
+    '</div>';
+
   const moments = [...window.CP_DATA.moments];
   moments.sort((a, b) => {
     var cmp = a.date.localeCompare(b.date);
@@ -27,6 +35,14 @@ function renderTimeline() {
   });
 
   container.innerHTML = '';
+
+  // 先插入排序按钮
+  container.insertAdjacentHTML('beforeend', sortHTML);
+  var sortBtn = container.querySelector('.tl-sort-toggle');
+  if (sortBtn) {
+    sortBtn.addEventListener('click', toggleSort);
+  }
+
   let lastYear = null;
 
   moments.forEach((moment, index) => {

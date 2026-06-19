@@ -320,15 +320,6 @@ body {
 .search-clear.visible { opacity: 1; pointer-events: auto; }
 .search-clear:hover { color: var(--rose); }
 
-/* Filter row: tag filters + sort toggle */
-.filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-}
-
 /* Category filter buttons */
 .tag-filters {
   display: flex;
@@ -359,27 +350,27 @@ body {
 
 .tag-count { opacity: 0.7; font-size: 0.76rem; margin-left: 2px; }
 
-/* ——— 工具栏排序按钮 ——— */
+/* ——— Timeline sort toggle (与年份标签完全同高) ——— */
 .tl-sort-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 5px 14px;
-  border: 1.5px solid var(--pink-dark);
+  display: inline-block;
+  padding: 5px 18px;
+  border: none;
   border-radius: 20px;
-  background: var(--card);
-  color: var(--text-light);
-  font-size: 0.83rem;
-  font-family: var(--font-body);
+  background: var(--pink);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: var(--font-display);
   cursor: pointer;
-  transition: var(--transition);
   white-space: nowrap;
-  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  float: right;
+  margin-top: -3px;
 }
 
-.tl-sort-toggle:hover { background: var(--pink); color: var(--text); }
+.tl-sort-toggle:hover { background: var(--pink-dark); color: var(--text); }
 
-.tl-sort-toggle.desc { background: var(--coral); border-color: var(--coral); color: #fff; }
+.tl-sort-toggle.desc { background: var(--coral); color: #fff; }
 .tl-sort-toggle.desc:hover { background: var(--coral-dark); color: #fff; }
 
 /* ============================================================
