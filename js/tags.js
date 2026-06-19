@@ -79,7 +79,14 @@ function applyFilters() {
     const searchMatch = !query || searchText.includes(query);
 
     if (catMatch && searchMatch) {
+      var wasFiltered = entry.classList.contains('filtered-out');
       entry.classList.remove('filtered-out');
+      // 从筛选恢复时跳过动画延时，立即显示
+      if (wasFiltered && entry.classList.contains('visible')) {
+        entry.style.transition = 'none';
+        entry.offsetHeight; // 强制重排
+        entry.style.transition = '';
+      }
       visibleCount++;
     } else {
       entry.classList.add('filtered-out');
