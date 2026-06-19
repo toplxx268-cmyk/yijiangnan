@@ -33,6 +33,7 @@ window.CP_DATA = {
     { name: "秦皇岛阿那亚", city: "秦皇岛", country: "中国", lat: 39.9350, lng: 119.6000, date: "24年10月·25年8月·26年6月", emoji: "🌊" },
     { name: "张家口崇礼", city: "张家口", country: "中国", lat: 40.9747, lng: 115.2816, date: "24年12月", emoji: "🎿" },
     { name: "来古冰川", city: "昌都", country: "中国", lat: 29.3000, lng: 96.9000, date: "25年1月", emoji: "🏔️" },
+    { name: "汉堡", city: "", country: "德国", lat: 53.5511, lng: 9.9937, date: "25年4月", emoji: "🏛️" },
     { name: "泉州", city: "泉州", country: "中国", lat: 24.8741, lng: 118.6758, date: "25年6月", emoji: "🏮" },
     { name: "青岛", city: "青岛", country: "中国", lat: 36.0671, lng: 120.3826, date: "25年11月", emoji: "🍺" },
     { name: "土耳其", city: "", country: "土耳其", lat: 38.9637, lng: 35.2433, date: "25年12月", emoji: "🕌" },
