@@ -4,8 +4,8 @@
 //    选择「Web端(JS API)」
 //    安全密钥（jscode）在 Key 详情页可见，2021年底后新建的 Key 必须填写
 // ============================================================
-var AMAP_KEY    = '4bb326d989ffdd2851d44342fc6e6406';
-var AMAP_JSCODE = 'YOUR_JSCODE';  // ← 填入安全密钥，如果没有可以不填
+var AMAP_KEY    = 'b6a3c822b472de0ef43ac88346651081';
+var AMAP_JSCODE = '4bb326d989ffdd2851d44342fc6e6406';  // ← 填入安全密钥，如果没有可以不填
 
 // 动态加载高德地图 JS API
 (function loadAmap() {
