@@ -269,7 +269,7 @@ function renderFootprintMap() {
   });
   var titleEl = document.getElementById('footprintTitle');
   if (titleEl) {
-    titleEl.textContent = '👣 ' + Object.keys(cities).length + '城·' + Object.keys(countries).length + '国';
+    titleEl.textContent = '👣 国内' + Object.keys(cities).length + '城·国外' + Object.keys(countries).length + '国';
   }
 
   // 初始化高德地图（默认聚焦中国区域）
