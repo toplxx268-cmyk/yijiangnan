@@ -22,12 +22,11 @@ function renderTimeline() {
 
   // 排序按钮（放在时间线顶部右侧）
   var sortIcon = SORT_DESC ? '↓' : '↑';
-  var sortLabel = SORT_DESC ? '倒序' : '正序';
   var sortCls = SORT_DESC ? ' desc' : '';
   var sortHTML = '' +
     '<div class="tl-sort-toggle' + sortCls + '" id="sortToggle" title="切换排序">' +
     '  <span class="sort-icon">' + sortIcon + '</span>' +
-    '  <span class="sort-label">' + sortLabel + '</span>' +
+    '  <span class="sort-label">排序</span>' +
     '</div>';
 
   const moments = [...window.CP_DATA.moments];
