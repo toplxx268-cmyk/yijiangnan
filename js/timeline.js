@@ -10,12 +10,6 @@ var SORT_DESC = true; // true=倒序(最新在前), false=正序(最早在前)
  */
 function toggleSort() {
   SORT_DESC = !SORT_DESC;
-  var btn = document.getElementById('sortToggle');
-  if (btn) {
-    btn.querySelector('.sort-icon').textContent = SORT_DESC ? '↓' : '↑';
-    btn.querySelector('.sort-label').textContent = SORT_DESC ? '倒序' : '正序';
-    btn.classList.toggle('desc', SORT_DESC);
-  }
   renderTimeline();
 }
 
@@ -26,6 +20,16 @@ function renderTimeline() {
   const container = document.getElementById('timeline');
   if (!container) return;
 
+  // 排序按钮（放在时间线顶部右侧）
+  var sortIcon = SORT_DESC ? '↓' : '↑';
+  var sortLabel = SORT_DESC ? '倒序' : '正序';
+  var sortCls = SORT_DESC ? ' desc' : '';
+  var sortHTML = '' +
+    '<div class="tl-sort-toggle' + sortCls + '" id="sortToggle" title="切换排序">' +
+    '  <span class="sort-icon">' + sortIcon + '</span>' +
+    '  <span class="sort-label">' + sortLabel + '</span>' +
+    '</div>';
+
   const moments = [...window.CP_DATA.moments];
   moments.sort((a, b) => {
     var cmp = a.date.localeCompare(b.date);
@@ -33,6 +37,14 @@ function renderTimeline() {
   });
 
   container.innerHTML = '';
+
+  // 先插入排序按钮
+  container.insertAdjacentHTML('beforeend', sortHTML);
+  var sortBtn = container.querySelector('.tl-sort-toggle');
+  if (sortBtn) {
+    sortBtn.addEventListener('click', toggleSort);
+  }
+
   let lastYear = null;
 
   moments.forEach((moment, index) => {

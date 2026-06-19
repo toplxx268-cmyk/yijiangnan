@@ -350,8 +350,8 @@ body {
 
 .tag-count { opacity: 0.7; font-size: 0.76rem; margin-left: 2px; }
 
-/* ——— Sort toggle ——— */
-.sort-toggle {
+/* ——— Timeline sort toggle ——— */
+.tl-sort-toggle {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -365,12 +365,13 @@ body {
   cursor: pointer;
   transition: var(--transition);
   white-space: nowrap;
-  flex-shrink: 0;
+  float: right;
+  margin-top: -6px;
 }
 
-.sort-toggle:hover { background: var(--pink); color: var(--text); }
+.tl-sort-toggle:hover { background: var(--pink); color: var(--text); }
 
-.sort-toggle.desc { background: var(--coral); border-color: var(--coral); color: #fff; }
+.tl-sort-toggle.desc { background: var(--coral); border-color: var(--coral); color: #fff; }
 
 .sort-icon { font-size: 1rem; line-height: 1; }
 .sort-label { font-size: 0.8rem; }
