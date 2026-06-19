@@ -2,6 +2,23 @@
 // Timeline — 时间线渲染
 // ============================================================
 
+/** 全局排序状态 */
+var SORT_DESC = true; // true=倒序(最新在前), false=正序(最早在前)
+
+/**
+ * 切换排序并重新渲染
+ */
+function toggleSort() {
+  SORT_DESC = !SORT_DESC;
+  var btn = document.getElementById('sortToggle');
+  if (btn) {
+    btn.querySelector('.sort-icon').textContent = SORT_DESC ? '↓' : '↑';
+    btn.querySelector('.sort-label').textContent = SORT_DESC ? '倒序' : '正序';
+    btn.classList.toggle('desc', SORT_DESC);
+  }
+  renderTimeline();
+}
+
 /**
  * 渲染完整时间线
  */
@@ -10,7 +27,10 @@ function renderTimeline() {
   if (!container) return;
 
   const moments = [...window.CP_DATA.moments];
-  moments.sort((a, b) => a.date.localeCompare(b.date));
+  moments.sort((a, b) => {
+    var cmp = a.date.localeCompare(b.date);
+    return SORT_DESC ? -cmp : cmp;
+  });
 
   container.innerHTML = '';
   let lastYear = null;
