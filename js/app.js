@@ -70,7 +70,8 @@ if (AMAP_JSCODE && AMAP_JSCODE !== 'YOUR_JSCODE') {
 
   // ——— Initialize ———
   Lightbox.init();
-  renderTimeline();  // 默认倒序（排序按钮由 timeline.js 渲染和绑定）
+  initSortToggle();
+  renderTimeline();  // 默认倒序
   initCategoryFilters();
   initSearch();
   renderGallery();
@@ -90,6 +91,18 @@ function escapeHTML(str) {
 }
 
 /** Back to top button */
+function initSortToggle() {
+  var btn = document.getElementById('sortToggle');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      toggleSort();
+      // 更新按钮状态
+      btn.textContent = (SORT_DESC ? '↓' : '↑') + ' 排序';
+      btn.classList.toggle('desc', SORT_DESC);
+    });
+  }
+}
+
 /** 渲染最新动态概览 */
 function renderFeeds() {
   var feeds = window.LATEST_FEEDS;

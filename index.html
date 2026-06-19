@@ -47,8 +47,11 @@
         <input type="text" id="searchInput" placeholder="搜索我们的故事...">
         <button class="search-clear" id="searchClear" aria-label="清除搜索">&times;</button>
       </div>
-      <div class="tag-filters" id="tagFilters">
-        <!-- 分类筛选按钮由 JS 渲染 -->
+      <div class="filter-row">
+        <div class="tag-filters" id="tagFilters">
+          <!-- 分类筛选按钮由 JS 渲染 -->
+        </div>
+        <div class="tl-sort-toggle" id="sortToggle" title="切换排序">↓ 排序</div>
       </div>
     </div>
   </div>
@@ -162,6 +165,6 @@
   <script src="js/timeline.js"></script>
   <script src="js/tags.js"></script>
   <script src="js/search.js"></script>
-  <script src="js/app.js?v=8"></script>
+  <script src="js/app.js?v=9"></script>
 </body>
 </html>
